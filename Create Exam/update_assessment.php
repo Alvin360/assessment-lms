@@ -21,6 +21,9 @@ function updateAssessment($conn, $data) {
         $data['assessmentID']
     );
     return $stmt->execute();
+
+
+    
 }
 
 // Function to update questions

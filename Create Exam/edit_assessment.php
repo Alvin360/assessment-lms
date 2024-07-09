@@ -220,11 +220,11 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         </div>
         <div class="form-group">
             <label for="openDate">Open Date:</label>
-            <input type="date" id="openDate" name="openDate" value="<?php echo isset($assessment['open_Date']) ? htmlspecialchars($assessment['open_Date']) : ''; ?>">
+            <input type="datetime-local" id="openDate" name="openDate" value="<?php echo isset($assessment['open_date']) ? htmlspecialchars($assessment['open_date']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="closingDate">Closing Date:</label>
-            <input type="date" id="closingDate" name="closingDate" value="<?php echo isset($assessment['closing_date']) ? htmlspecialchars($assessment['closing_date']) : ''; ?>">
+            <input type="datetime-local" id="closingDate" name="closingDate" value="<?php echo isset($assessment['closing_date']) ? htmlspecialchars($assessment['closing_date']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="allowedAttempts">Allowed Attempt:</label> 
