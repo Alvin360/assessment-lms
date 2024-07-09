@@ -1,0 +1,28 @@
+#landing_page {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex_row{
+    display: flex;
+    flex-direction: row;
+}
+
+#container_assessments_students {
+    width: 80%;
+}
+
+.card_topic {
+    margin-top: 1%;
+    width: 100%;
+}
+
+.container_assessment_student {
+    border: 1px solid #000000;
+    width: 100%;
+}
