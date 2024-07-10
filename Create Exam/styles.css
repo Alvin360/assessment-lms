@@ -9,6 +9,21 @@ body {
     font-family: Arial, sans-serif;
     margin: 20px;
 }
+
+.assessment-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.assessment-item h3 {
+    margin-top: 0;
+}
+button {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 10px;
+}
 .form-group {
     margin-bottom: 10px;
 }

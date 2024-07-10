@@ -3,27 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    
     <title>Assessment List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .assessment-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .assessment-item h3 {
-            margin-top: 0;
-        }
-        button {
-            padding: 5px 10px;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-    </style>
+
 </head>
 <body>
     <h1>Assessment List</h1>
