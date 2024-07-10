@@ -34,7 +34,7 @@
 
     <script>
         async function fetchAssessments() {
-            const response = await fetch('get_assessments.php');
+            const response = await fetch('includes/get_assessments.php');
             const assessments = await response.json();
 
             const assessmentListDiv = document.getElementById('assessment-list');
@@ -53,7 +53,7 @@
 
         function editAssessment(assessmentID) {
             // Redirect to edit page passing assessmentID as parameter
-            window.location.href = `edit_assessment.php?id=${assessmentID}`;
+            window.location.href = `includes/edit_assessment.php?id=${assessmentID}`;
         }
     </script>
 </body>

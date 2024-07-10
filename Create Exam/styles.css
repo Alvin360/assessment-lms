@@ -1,0 +1,27 @@
+fieldset {
+    border-style: none;
+    border-bottom: solid;
+    border-color: rgb(222, 226, 230);
+    border-width: 2px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
