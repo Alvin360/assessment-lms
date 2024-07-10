@@ -6,6 +6,9 @@ async function fetchAssessmentDetails() {
     const response = await fetch(`fetch_assessment_details.php?assessmentID=${assessmentID}`);
     const data = await response.json();
 
+    // Log the fetched data to verify
+    console.log('Fetched data:', data);
+
     // Set the assessment name in the HTML
     document.getElementById('assessment-name').textContent = data.assessment_Name;
 
@@ -40,24 +43,28 @@ async function fetchAssessmentDetails() {
             // Matching question
             questionHTML += '<table>';
             const matchOptions = [];
+            const matches = [];
             for (let i = 1; i <= 10; i++) {
+                if (question[`match${i}`]) {
+                    matches.push(question[`match${i}`]);
+                }
                 if (question[`match${i}`]) {
                     matchOptions.push(question[`match${i}`]);
                 }
             }
-            for (let i = 1; i <= matchOptions.length; i++) {
+            matches.forEach((match, index) => {
                 questionHTML += `
                     <tr>
-                        <td>${question[`match${i}`]}</td>
+                        <td>${match}</td>
                         <td>
-                            <select name="question-${question.question_ID}-match${i}" required>
+                            <select name="question-${question.question_ID}-match${index + 1}" required>
                                 <option value="">Select...</option>
                                 ${matchOptions.map(option => `<option value="${option}">${option}</option>`).join('')}
                             </select>
                         </td>
                     </tr>
                 `;
-            }
+            });
             questionHTML += '</table>';
         }
 
@@ -80,19 +87,24 @@ async function fetchAssessmentDetails() {
 
     // Set up the timer if there is a time limit
     if (data.time_Limit) {
+        console.log('Setting up timer with limit:', data.time_Limit);
         setupTimer(data.time_Limit);
     }
 }
 
 function setupTimer(timeLimit) {
     const timerElement = document.getElementById('timer');
-    let timeRemaining = parseInt(timeLimit) * 60; // Convert minutes to seconds
+
+    // Parse the time limit in format Hr:Min:Sec
+    const timeParts = timeLimit.split(':');
+    let timeRemaining = (+timeParts[0] * 3600) + (+timeParts[1] * 60) + (+timeParts[2]); // Convert to seconds
 
     const interval = setInterval(() => {
-        const minutes = Math.floor(timeRemaining / 60);
+        const hours = Math.floor(timeRemaining / 3600);
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
         const seconds = timeRemaining % 60;
 
-        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
         if (timeRemaining <= 0) {
             clearInterval(interval);
