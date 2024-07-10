@@ -52,6 +52,24 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Assessment</title>
     <link rel="stylesheet" href="../styles.css">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Flatpickr Duration Plugin CSS -->
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr@4.6.9/dist/plugins/rangePlugin.css">
+    <!-- Custom Styles -->
+    <style>
+        .flatpickr-time {
+            display: flex;
+            justify-content: center;
+        }
+        .flatpickr-hour, .flatpickr-minute {
+            flex: 1;
+        }
+    </style>
+
     <script>
         let questionCount = <?php echo $resultQuestions->num_rows; ?>;
 
@@ -194,8 +212,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
             <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_desc']) ? htmlspecialchars($assessment['assessment_desc']) : ''; ?>">
         </div>
         <div class="form-group">
-            <label for="timeLimit">Time Limit (minutes):</label>
-            <input type="number" id="timeLimit" name="timeLimit" value="<?php echo isset($assessment['time_Limit']) ? htmlspecialchars($assessment['time_Limit']) : ''; ?>" required>
+            <label for="timeLimit">Time Limit (Hour / Minutes):</label>
+            <input type="text" id="timeLimit" name="timeLimit" value="<?php echo isset($assessment['time_Limit']) ? htmlspecialchars($assessment['time_Limit']) : ''; ?>" required>
         </div>
         <div class="form-group">
             <label for="openDate">Open Date:</label>
@@ -271,6 +289,18 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         <button type="button" onclick="addQuestion()">Add New Question</button>
         <button type="submit">Save</button>
     </form>
+
+    <script>
+        flatpickr("#timeLimit", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minuteIncrement: 1,
+            defaultHour: 0,
+            defaultMinute: 0
+        });
+    </script>
 </body>
 </html>
 

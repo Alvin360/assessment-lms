@@ -1,4 +1,5 @@
 <?php
+session_start(); // Start the session
 require "db.php";
 
 // Function to update assessment
@@ -145,13 +146,16 @@ try {
     $questions = isset($_POST['questions']) ? $_POST['questions'] : [];
     $newQuestions = isset($_POST['newQuestions']) ? $_POST['newQuestions'] : [];
 
+    $creatorID = $_SESSION['creatorID'];
+    $subjectCode = $_SESSION['subjectCode'];
+
     $data = [
         'assessmentID' => $assessmentID,
         'assessmentName' => $_POST['assessmentName'],
         'date' => date('Y-m-d'),
         'open_date' => $_POST['openDate'],
-        'creatorID' => '1', // Replace with actual creator ID
-        'subjectCode' => 'SUB123', // Replace with actual subject code
+        'creatorID' => $creatorID, // Replace with actual creator ID
+        'subjectCode' => $subjectCode, // Replace with actual subject code
         'assessmentType' => 'Q',
         'timeLimit' => $_POST['timeLimit'],
         'closingDate' => $_POST['closingDate'],
