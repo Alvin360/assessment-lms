@@ -48,7 +48,7 @@ button {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #b22222; 
+    background-color: #ec1616; 
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -60,4 +60,26 @@ button:hover {
 
 .assessment_ID{
     text-align: right; 
+}
+
+.notif{
+    text-align: center;
+}
+
+#back {
+    display: block;
+    width: 200px;
+    margin: 20px 0 20px 20px; /* Top, Right, Bottom, Left margins */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ec1616; 
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    align-content: left;
+}
+
+#back:hover {
+    background-color: #a11a1a;
 }

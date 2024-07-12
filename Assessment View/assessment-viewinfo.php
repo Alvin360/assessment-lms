@@ -98,6 +98,7 @@
         } else {
             echo "User ID not set in session.";
         }
+        echo "<button id = 'back'>Back</button>";
         ?>
     </div>
 </body>
