@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Assessment</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        let questionCount = 0;
+
+        function addQuestion() {
+            questionCount++;
+            const questionsContainer = document.getElementById('questions-container');
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'form-group';
+
+            questionDiv.innerHTML = `
+                <label for="question-${questionCount}">Question ${questionCount}:</label>
+                <input type="text" id="question-${questionCount}" name="questions[${questionCount}][text]" required>
+                
+                <label for="question-type-${questionCount}">Question Type:</label>
+                <select id="question-type-${questionCount}" name="questions[${questionCount}][type]" onchange="displayOptions(this, ${questionCount})" required>
+                    <option value="">Select Type</option>
+                    <option value="M">Multiple Choice</option>
+                    <option value="T">True or False</option>
+                    <option value="S">Short Answer (Fill-in-the-Blank)</option>
+                    <option value="F">Match</option>
+                </select>
+
+                <div id="options-${questionCount}" class="options-container"></div>
+            `;
+
+            questionsContainer.appendChild(questionDiv);
+        }
+
+        function displayOptions(selectElement, count) {
+            const selectedType = selectElement.value;
+            const optionsContainer = document.getElementById(`options-${count}`);
+            optionsContainer.innerHTML = '';
+            if (selectedType === 'M') {
+                optionsContainer.innerHTML = `
+                    <label for="option1-${count}">Option 1:</label>
+                    <input type="text" id="option1-${count}" name="questions[${count}][options][0]" required>
+                    <label for="option2-${count}">Option 2:</label>
+                    <input type="text" id="option2-${count}" name="questions[${count}][options][1]" required>
+                    <label for="option3-${count}">Option 3:</label>
+                    <input type="text" id="option3-${count}" name="questions[${count}][options][2]" required>
+                    <label for="option4-${count}">Option 4:</label>
+                    <input type="text" id="option4-${count}" name="questions[${count}][options][3]" required>
+
+                    <label for="correct-answer-${count}">Correct Answer:</label>
+                    <select id="correct-answer-${count}" name="questions[${count}][correctAnswer]" required>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                    </select>
+                `;
+            } else if (selectedType === 'T') {
+                optionsContainer.innerHTML = `
+                    <label for="boolean-${count}">Correct Answer (True/False):</label>
+                    <select id="boolean-${count}" name="questions[${count}][correctAnswer]" required>
+                        <option value="T">True</option>
+                        <option value="F">False</option>
+                    </select>
+                `;
+            } else if (selectedType === 'S') {
+                optionsContainer.innerHTML = `
+                    <label for="fill-blank-${count}">Correct Answer:</label>
+                    <input type="text" id="fill-blank-${count}" name="questions[${count}][correctAnswer]" required>
+                `;
+            } else if (selectedType === 'F') {
+                for (let i = 1; i <= 10; i++) {
+                    optionsContainer.innerHTML += `
+                        <label for="match${i}-${count}">Match ${i}:</label>
+                        <input type="text" id="match${i}-${count}" name="questions[${count}][match][${i - 1}]" ${i <= 4 ? 'required' : ''}>
+                        
+                        <label for="m-ans${i}-${count}">Match Correct Answer ${i}:</label>
+                        <select id="m-ans${i}-${count}" name="questions[${count}][m_Ans${i}]" ${i <= 4 ? 'required' : ''}>
+                            ${Array.from({ length: 10 }, (_, index) => `<option value="${index + 1}">Match ${index + 1}</option>`).join('')}
+                        </select>
+                    `;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Create Assessment</h1>
+    <form id="assessment-form" action="save_assessment.php" method="POST">
+        <div class="form-group">
+            <label for="assessment-name">Assessment Name:</label>
+            <input type="text" id="assessmentName" name="assessmentName" required>
+        </div>
+        <div id="questions-container"></div>
+        <button type="button" onclick="addQuestion()">Add Question</button>
+        <button type="submit">Create Assessment</button>
+    </form>
+</body>
+</html>
