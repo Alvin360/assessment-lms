@@ -4,8 +4,8 @@ require "db.php";
 $assessmentID = $_POST['assessmentID'];
 $userID = $_POST['userID'];
 
-$assessmentID = 'A668c246ea';
-$userID = 'U1234567890';
+//$assessmentID = 'A66929e7ea';
+//$userID = 'U1234567890';
 
 // Collect all user answers
 $userAnswers = $_POST;
@@ -123,7 +123,6 @@ $date = date('Y-m-d');
 $stmt->bind_param("sssdss", $userID, $assessmentID, $earnedPoints, $grade, $subjectCode, $date);
 $stmt->execute();
 $stmt->close();
-
 
 $dateEnd = date('Y-m-d');
 $timeEnd = date('H:i:s');
