@@ -88,10 +88,39 @@
 </head>
 <body>
     <h1>Create Assessment</h1>
-    <form id="assessment-form" action="save_assessment.php" method="POST">
+    <form id="assessment-form" action="includes/save_assessment.php" method="POST">
         <div class="form-group">
             <label for="assessment-name">Assessment Name:</label>
             <input type="text" id="assessmentName" name="assessmentName" required>
+        </div>
+        <div class="form-group">
+            <label for="assessment_desc">Assessment Description:</label>
+            <textarea id="assessment_desc" name="assessment_desc" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="subject_code">Subject Code:</label>
+            <input type="text" id="subject_code" name="subject_code" required>
+        </div>
+        <div class="form-group">
+            <label for="assessment_type">Assessment Type:</label>
+            <input type="text" id="assessment_type" name="assessment_type" required>
+        </div>
+        <div class="form-group">
+            <label for="open_date">Open Date:</label>
+            <input type="datetime-local" id="open_date" name="open_date" required>
+        </div>
+        <div class="form-group">
+            <label for="closing_date">Closing Date:</label>
+            <input type="datetime-local" id="closing_date" name="closing_date" required>
+        </div>
+        <div class="form-group">
+            <label for="time_limit">Time Limit (Hour:Minute:Seconds):</label>
+            <input type="text" id="time_limit" name="time_limit" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)" title="Enter a valid time format (H:i:s)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="allowed_attempts">Allowed Attempts:</label>
+            <input type="number" id="allowed_attempts" name="allowed_attempts" required>
         </div>
         <div id="questions-container"></div>
         <button type="button" onclick="addQuestion()">Add Question</button>
