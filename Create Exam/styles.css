@@ -41,34 +41,55 @@ button {
     font-size: 16px;
 }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
+#assessment-list {
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
 }
-
+.assessment-item {
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.assessment-item h3 {
+    margin: 0;
+}
+.dropdown {
+    margin-top: 10px;
+    position: relative;
+}
+.dropdown button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
     z-index: 1;
 }
-
 .dropdown-content div {
-    padding: 12px 16px;
-    cursor: pointer;
+    margin-bottom: 10px;
 }
-
+.dropdown-content label {
+    margin-left: 5px;
+}
 .dropdown-content button {
-    width: 100%;
-    text-align: left;
+    background-color: #28a745;
+    color: #fff;
     border: none;
-    background: none;
-    padding: 12px 16px;
+    padding: 10px;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-.checkbox {
-    margin-right: 10px;
 }

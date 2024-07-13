@@ -14,7 +14,7 @@
     <div id="assessment-list">
         <!-- Existing assessments will be displayed here -->
     </div>
-    <button onclick="window.location.href='pages/create_assessment.html'">Create New Assessment</button>
+    <button onclick="window.location.href='create_assessment.html'">Create New Assessment</button>
 
     <script>
         async function fetchAssessments() {
@@ -75,6 +75,11 @@
     </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
