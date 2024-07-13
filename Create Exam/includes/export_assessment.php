@@ -74,7 +74,7 @@ if (isset($_GET['id'])) {
 
             // Assessment-specific header content
             global $assessment;
-            $this->SetFont('Arial','B',12);
+            $this->SetFont('Arial','B',14);
             $this->Cell(0,10,$assessment['assessment_Name'],0,1,'C');
 
             // Instructions only on the first page
