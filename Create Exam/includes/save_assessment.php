@@ -17,7 +17,7 @@ $assessmentID = uniqid('A');
 $date = date('Y-m-d H:i:s');
 
 
-$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
+$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts);

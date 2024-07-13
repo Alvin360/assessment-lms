@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        .dropdown-content {
+        display: none;
+        }
+    </style>
     
     <title>Assessment List</title>
 
@@ -28,9 +35,9 @@
                 assessmentDiv.innerHTML = `
                     <h3>${assessment.assessment_Name}</h3>
                     <div class="dropdown">
-                        <button onclick="editAssessment('${assessment.assessment_ID}')">Edit</button>
-                        <button onclick="toggleDropdown('${assessment.assessment_ID}')">Export</button>
-                        <div id="dropdown-${assessment.assessment_ID}" class="dropdown-content">
+                            <button onclick="editAssessment('${assessment.assessment_ID}')">Edit</button>
+                            <button onclick="toggleDropdown('${assessment.assessment_ID}')">Export</button>
+                            <div id="dropdown-${assessment.assessment_ID}" class="dropdown-content">
                             <div>
                                 <input type="checkbox" class="checkbox" id="include-answer-key-${assessment.assessment_ID}">
                                 <label for="include-answer-key-${assessment.assessment_ID}">Include Answer Key</label>
@@ -48,15 +55,19 @@
                             </div>
                         </div>
                     </div>
+
+
                 `;
                 assessmentListDiv.appendChild(assessmentDiv);
             });
         }
 
-        function toggleDropdown(assessmentID) {
-            const dropdown = document.getElementById(`dropdown-${assessmentID}`);
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        function toggleDropdown(id) {
+        $('#dropdown-' + id).toggle();
         }
+
+
+
 
         fetchAssessments();
 
@@ -72,6 +83,9 @@
             const url = `includes/export_assessment.php?id=${assessmentID}&includeAnswerKey=${includeAnswerKey}&includeAnswerSheet=${includeAnswerSheet}&shuffleQuestions=${shuffleQuestions}`;
             window.location.href = url;
         }
+
+
+    
     </script>
 </body>
 </html>

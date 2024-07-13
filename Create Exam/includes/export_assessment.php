@@ -157,10 +157,9 @@ if (isset($_GET['id'])) {
             $this->AddPage();
             // Header for answer key
             global $assessment;
-            $this->SetFont('Arial','B',14);
+            $this->SetFont('Arial','B',12);
             $this->Cell(0,10,'Answer Key',0,1,'C');
             $this->SetFont('Arial','B',12);
-            $this->Cell(0,10,$assessment['assessment_Name'],0,1,'C');
             $this->Ln(10);
 
             // Display correct answers
