@@ -4,17 +4,23 @@ require "db.php";
 $assessmentName = $_POST['assessmentName'];
 $questions = $_POST['questions'];
 $creatorID = '1'; // Replace with actual creator ID
-$subjectCode = 'SUB123'; // Replace with actual subject code
-$assessmentType = 'Q';
-$timeLimit = '30';
+$openDate = $_POST['open_date'];
+$closingDate = $_POST['closing_date'];
+$timeLimit = $_POST['time_limit'];
+$assessmentDesc = $_POST['assessment_desc'] ?? '';
+$allowedAttempts = $_POST['allowed_attempts'] ?? '';
+$subjectCode = $_POST['subject_code'] ?? '';
+$assessmentType = $_POST['assessment_type'] ?? '';
+$timeLimit = $_POST['time_limit'] ?? '';
 $noOfItems = count($questions);
 $assessmentID = uniqid('A');
-$date = date('Y-m-d');
+$date = date('Y-m-d H:i:s');
 
-$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('ssssssss', $assessmentID, $assessmentName, $date, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems);
+$stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts);
 
 if ($stmt->execute()) {
     $insertQuestionSql = "INSERT INTO EXAMINATION_BANK (assessment_ID, question_ID, question_No, question, points, question_Type, choice1, choice2, choice3, choice4, boolean, fill_Blank, match1, match2, match3, match4, match5, match6, match7, match8, match9, match10) 
@@ -26,8 +32,8 @@ if ($stmt->execute()) {
     $stmtInsertAnswer = $conn->prepare($insertAnswerSql);
 
     foreach ($questions as $index => $question) {
-        $questionID = $index + 1;
-        $questionNo = $index + 1;
+        $questionID = $index;
+        $questionNo = $index;
         $questionText = $question['text'];
         $points = 1;
         $questionType = $question['type'];
