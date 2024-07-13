@@ -80,7 +80,7 @@ if (isset($_GET['id'])) {
             // Instructions only on the first page
             if ($this->PageNo() == 1) {
                 $this->SetFont('Arial','I',10);
-                $this->Cell(0,10,'Instructions: ' . $assessment['assessment_desc'],0,1,'L');
+                $this->Cell(0,10,'Instructions: ' . $assessment['assessment_Desc'],0,1,'L');
                 $this->Ln(10);
             }
         }
