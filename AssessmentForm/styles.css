@@ -48,7 +48,7 @@ h1 {
     margin-right: 10px;
 }
 
-.submit-button {
+.submit-button, .back-button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #007BFF;
@@ -56,9 +56,11 @@ h1 {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
 }
 
-.submit-button:hover {
+.submit-button:hover, .back-button:hover {
     background-color: #0056b3;
 }
 
@@ -75,4 +77,52 @@ table td {
 table select {
     width: 100%;
     padding: 5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.assessment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #0056b3;
 }

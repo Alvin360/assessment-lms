@@ -2,7 +2,7 @@
 require "db.php";
 
 $assessmentID = $_GET['assessmentID'];
-$assessmentID = 'A668c246ea';
+//$assessmentID = 'A66929e7ea';
 
 $assessmentSQL = "SELECT assessment_Name, time_Limit FROM assessment WHERE assessment_ID = ?";
 $stmt = $conn->prepare($assessmentSQL);
