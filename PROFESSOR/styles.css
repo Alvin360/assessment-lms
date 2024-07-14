@@ -33,7 +33,6 @@ body {
 
 .container_collapsed {
     display: flex;
-    flex-direction: row;
 }
 
 .container_student {
@@ -46,6 +45,7 @@ body {
 .container_buttons {
     display: flex;
     justify-content: flex-end;
+    flex-grow: 1;
 }
 
 .container_assessment {

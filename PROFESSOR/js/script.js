@@ -16,16 +16,18 @@ function populateAssessments(assessments) {
   const assessmentsContainer = document.getElementById('container_section_assessment');
   assessmentsContainer.innerHTML = '';
 
-  // Group assessments by subject code
+  // Group assessments by subject code and name
   const groupedAssessments = assessments.reduce((acc, assessment) => {
-      if (!acc[assessment.subject_Code]) {
-          acc[assessment.subject_Code] = [];
+      const subjectKey = `${assessment.subject_Code}: ${assessment.subject_name}`;
+      if (!acc[subjectKey]) {
+          acc[subjectKey] = [];
       }
-      acc[assessment.subject_Code].push(assessment);
+      acc[subjectKey].push(assessment);
       return acc;
   }, {});
 
-  // Create sections for each subject code
+  // Create sections for each subject code and name
+// Create sections for each subject code
   Object.keys(groupedAssessments).forEach(subjectCode => {
       const subjectSection = document.createElement('div');
       subjectSection.className = 'subject_section';
@@ -49,14 +51,15 @@ function populateAssessments(assessments) {
                       <button class="button_collapse hidden">Collapse</button>
                       <button class="button_expand">Expand</button>
                       <h2>${assessment.assessment_name}</h2>
-                  </div>
-  
-                  <div class="container_expanded hidden">
+
                       <div class="container_buttons">
                           <button class="button_export" data-id="${assessment.assessment_id}">Export</button>
                           <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
                           <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
                       </div>
+                  </div>
+  
+                  <div class="container_expanded hidden">
                       <p>Opened: ${assessment.open_Date}</p>
                       <p>Due: ${assessment.closing_Date}</p>
                       <div class="container_student" assessmentID="${assessment.assessment_id}">
