@@ -60,3 +60,85 @@ button {
     display: none;
     position: absolute;
 }
+
+header {
+    background-color: #990000;
+    color: white;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #FFF;
+    color: black;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-left: 100px;
+}
+
+.main-nav ul li {
+    margin-right: 25px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+.profile-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-left: 1000px;
+}
+
+.profile-nav ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+.profile-nav ul li {
+    margin-right: 25px;
+}
+
+
+.bottom-bar {
+    background-color: #990000;
+}
+
+.bottom-bar ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    margin-left: 10%;
+    padding: 0;
+    justify-content: left;
+}
+
+.bottom-bar ul li {
+    margin: 10px 20px;
+}
+
+.bottom-bar ul li a {
+    text-decoration: none;
+    color: #DE9E03;
+    font-weight: bold;
+}
