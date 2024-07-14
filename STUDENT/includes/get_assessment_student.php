@@ -44,8 +44,8 @@
                 'subject_Code' => $row['subject_Code'],
                 'assessment_id' => $row['assessment_ID'],
                 'assessment_name' => $row['assessment_name'],
-                'open_Date' => $row['open_Date'],
-                'closing_Date' => $row['closing_Date'],
+                'open_Date' => date('g:iA F j, Y', strtotime($row['open_Date'])),
+                'closing_Date' => date('g:iA F j, Y', strtotime($row['closing_Date'])),
                 'attempted' => in_array($row['assessment_ID'], $attempted_assessments)
             ];
             $subject_assessments[$subject_name][] = $assessment;
