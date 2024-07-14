@@ -231,4 +231,27 @@ header {
 }
 
 
+.button-done {
+    background-color: green;
+    color: white;
+    height: 100%;
+    padding: 0.8%;
+    border-radius: 10px;
+    font-size: 0.8em;
+    width: 7vw;
+    text-align: center;
+    margin: 1%;
+}
+
+.button-not-attempted {
+    background-color: rgb(166, 0, 0);
+    color: white;
+    height: 100%;
+    padding: 0.8%;
+    border-radius: 10px;
+    font-size: 0.8em;
+    width: 7vw;
+    text-align: center;
+    margin: 1%;
+}
 

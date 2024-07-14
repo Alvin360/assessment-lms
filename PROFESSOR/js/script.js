@@ -141,23 +141,31 @@ function displayStudents(container, students) {
       const h3Element = document.createElement('h3');
       h3Element.textContent = student.name;
 
-      const reviewButton = document.createElement('button');
+      const reviewButton = document.createElement('div');
       reviewButton.className = 'review-button';
 
       // Set the button text based on the 'attempted' flag
-      reviewButton.textContent = student.attempted ? 'Review Attempt' : 'Not Attempted';
+      reviewButton.textContent = student.attempted ? 'Done' : 'Not Attempted';
 
-      if (!student.attempted) {
-        reviewButton.disabled = true; // Disable the button if not attempted
-      } 
-      else {
-          reviewButton.addEventListener('click', () => {
-              const assessmentID = student.assessmentID;
-              console.log(`Reviewing attempted assessment for student: ${student.name}, assessment ID: ${assessmentID}`);
-              // Redirect to PHP file with parameters
-              window.location.href = `../PROFESSOR/includes/review.php?assessmentID=${assessmentID}&user_ID=${student.user_ID}}`;
-          });
-      }
+      if (student.attempted) {
+        reviewButton.classList.add('button-done');
+        reviewButton.classList.remove('button-not-attempted');
+    } else {
+        reviewButton.classList.add('button-not-attempted');
+        reviewButton.classList.remove('button-done');
+    }
+
+      // if (!student.attempted) {
+      //   reviewButton.disabled = true; // Disable the button if not attempted
+      // } 
+      // else {
+      //     reviewButton.addEventListener('click', () => {
+      //         const assessmentID = student.assessmentID;
+      //         console.log(`Reviewing attempted assessment for student: ${student.name}, assessment ID: ${assessmentID}`);
+      //         // Redirect to PHP file with parameters
+      //         window.location.href = `../PROFESSOR/includes/review.php?assessmentID=${assessmentID}&user_ID=${student.user_ID}}`;
+      //     });
+      // }
 
       studentElement.appendChild(h3Element);
       studentElement.appendChild(reviewButton);
