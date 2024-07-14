@@ -4,8 +4,8 @@ require_once '../includes/dbh_inc.php';
 $assessmentName = $_POST['assessmentName'];
 $questions = $_POST['questions'];
 $creatorID = '201510754MN0'; // Replace with actual creator ID
-$open_Date = $_POST['open_Date'];
-$closing_Date = $_POST['closing_Date'];
+$openDate = $_POST['open_Date'];
+$closingDate = $_POST['closing_Date'];
 $timeLimit = $_POST['time_limit'];
 $assessmentDesc = $_POST['assessment_desc'] ?? '';
 $allowedAttempts = $_POST['allowed_attempts'] ?? '';
@@ -14,13 +14,13 @@ $assessmentType = $_POST['assessment_type'] ?? '';
 $timeLimit = $_POST['time_limit'] ?? '';
 $noOfItems = count($questions);
 $assessmentID = uniqid('A');
-$date_Created = date('Y-m-d H:i:s');
+$date = date('Y-m-d H:i:s');
 
 
-$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_Date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_Date, assessment_Desc, allowed_Attempts) 
+$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date_Created, $open_Date, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closing_Date, $assessmentDesc, $allowedAttempts);
+$stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts);
 
 if ($stmt->execute()) {
     $insertQuestionSql = "INSERT INTO EXAMINATION_BANK (assessment_ID, question_ID, question_No, question, points, question_Type, choice1, choice2, choice3, choice4, boolean, fill_Blank, match1, match2, match3, match4, match5, match6, match7, match8, match9, match10) 
