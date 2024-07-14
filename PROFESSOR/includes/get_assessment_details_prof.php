@@ -9,7 +9,7 @@
     // Create a string of subject codes for the SQL IN clause
     $subject_Codes_str = "'" . implode("', '", $subject_Codes) . "'";
 
-    $query_assessment = "SELECT assessment_id, subject_Code, assessment_name, open_date, closing_date 
+    $query_assessment = "SELECT assessment_id, subject_Code, assessment_name, open_Date, closing_Date 
                         FROM assessment 
                         WHERE subject_Code IN ($subject_Codes_str)";
     $result = executeQuery($conn, $query_assessment);
@@ -17,15 +17,15 @@
     $assessments = array();
 
     while ($row = $result['result']->fetch_assoc()) {
-        // Format open_date
-        $open_date = date('g:iA F j, Y', strtotime($row['open_date']));
+        // Format open_Date
+        $open_Date = date('g:iA F j, Y', strtotime($row['open_Date']));
         
-        // Format closing_date
-        $closing_date = date('g:iA F j, Y', strtotime($row['closing_date']));
+        // Format closing_Date
+        $closing_Date = date('g:iA F j, Y', strtotime($row['closing_Date']));
         
-        // Replace the original open_date and closing_date with formatted dates
-        $row['open_date'] = $open_date;
-        $row['closing_date'] = $closing_date;
+        // Replace the original open_Date and closing_Date with formatted dates
+        $row['open_Date'] = $open_Date;
+        $row['closing_Date'] = $closing_Date;
         
         // Add row to assessments array
         $assessments[] = $row;
@@ -33,7 +33,7 @@
 
     // Sort assessments by open date
     usort($assessments, function($a, $b) {
-        return strtotime($a['open_date']) - strtotime($b['open_date']);
+        return strtotime($a['open_Date']) - strtotime($b['open_Date']);
     });
 
     echo json_encode($assessments);

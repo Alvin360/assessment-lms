@@ -4,8 +4,8 @@ require_once '../includes/dbh_inc.php';
 $assessmentName = $_POST['assessmentName'];
 $questions = $_POST['questions'];
 $creatorID = '201510754MN0'; // Replace with actual creator ID
-$openDate = $_POST['open_date'];
-$closingDate = $_POST['closing_date'];
+$openDate = $_POST['open_Date'];
+$closingDate = $_POST['closing_Date'];
 $timeLimit = $_POST['time_limit'];
 $assessmentDesc = $_POST['assessment_desc'] ?? '';
 $allowedAttempts = $_POST['allowed_attempts'] ?? '';
@@ -17,7 +17,7 @@ $assessmentID = uniqid('A');
 $date = date('Y-m-d H:i:s');
 
 
-$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
+$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_Date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_Date, assessment_Desc, allowed_Attempts) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts);
