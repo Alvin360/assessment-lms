@@ -1,9 +1,10 @@
 <?php
+date_default_timezone_set('Asia/Hong_Kong');
 $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "";
 $dbname = "pup_lms";
-$port = "3307";
+$port = "3306";
 
 $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname, $port);
 

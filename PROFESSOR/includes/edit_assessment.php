@@ -315,7 +315,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         flatpickr("#timeLimit", {
             enableTime: true,
             noCalendar: true,
-            dateFormat: "H:i",
+            dateFormat: "H:i:s",
             time_24hr: true,
             minuteIncrement: 1,
             defaultHour: 0,
