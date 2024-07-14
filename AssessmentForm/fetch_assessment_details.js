@@ -1,9 +1,10 @@
 async function fetchAssessmentDetails() {
     const urlParams = new URLSearchParams(window.location.search);
-    const assessmentID = urlParams.get('assessmentID');
-
+    const assessmentID = urlParams.get('assessment_ID');
+    const userID = urlParams.get('user_ID');
+    
     // Fetch assessment details from the server
-    const response = await fetch(`fetch_assessment_details.php?assessmentID=${assessmentID}`);
+    const response = await fetch(`fetch_assessment_details.php?assessment_ID=${assessmentID}&user_ID=${userID}`);
     const data = await response.json();
 
     // Log the fetched data to verify
@@ -75,14 +76,14 @@ async function fetchAssessmentDetails() {
     // Add hidden input fields for assessmentID and userID
     const hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
-    hiddenInput.name = 'assessmentID';
+    hiddenInput.name = 'assessment_ID';
     hiddenInput.value = assessmentID;
     document.getElementById('assessment-form').appendChild(hiddenInput);
 
     const userIDInput = document.createElement('input');
     userIDInput.type = 'hidden';
-    userIDInput.name = 'userID';
-    userIDInput.value = 'USER123'; // Replace with actual userID
+    userIDInput.name = 'user_ID';
+    userIDInput.value = userID;
     document.getElementById('assessment-form').appendChild(userIDInput);
 
     // Set up the timer if there is a time limit
@@ -127,8 +128,6 @@ async function submitAssessment() {
     const result = await response.json();
     window.location.href = `display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}`;
 }
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchAssessmentDetails();
