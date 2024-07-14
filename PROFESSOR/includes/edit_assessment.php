@@ -105,7 +105,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         </div>
         <div class="form-group">
             <label for="assessmentDesc">Instructions:</label>
-            <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_desc']) ? htmlspecialchars($assessment['assessment_desc']) : ''; ?>">
+            <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_Desc']) ? htmlspecialchars($assessment['assessment_Desc']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="timeLimit">Time Limit (Hour / Minutes):</label>
@@ -121,7 +121,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         </div>
         <div class="form-group">
             <label for="allowedAttempts">Allowed Attempt:</label> 
-            <input type="number" id="allowedAttempts" name="allowedAttempts" value="<?php echo isset($assessment['allowed_attempts']) ? htmlspecialchars($assessment['allowed_attempts']) : ''; ?>" required>
+            <input type="number" id="allowedAttempts" name="allowedAttempts" value="<?php echo isset($assessment['allowed_Attempts']) ? htmlspecialchars($assessment['allowed_Attempts']) : ''; ?>" required>
         </div>
         <div id="existing-questions-container">
             <?php while ($question = $resultQuestions->fetch_assoc()): ?>
