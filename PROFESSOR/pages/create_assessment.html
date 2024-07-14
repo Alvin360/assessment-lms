@@ -4,12 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Assessment</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
+    <!-- Header section containing the navigation bars -->
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <img src="logo.png" alt="PUP">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">My courses</a></li>
+                    <li><a href="../index.php">Assessment</a></li>
+                </ul>
+            </nav>
+            <nav class="profile-nav">
+                <ul>
+                    <li><a href="#">Notification</a></li>
+                    <li><a href="#">Messages</a></li>
+                    <li><a href="#">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="bottom-bar">
+            <ul>
+                <li><a href="#">Course</a></li>
+                <li><a href="#">Participants</a></li>
+                <li><a href="#">Grades</a></li>
+                <li><a href="#">Competencies</a></li>
+            </ul>
+        </div>
+    </header>
+
     <h1>Create Assessment</h1>
     <form id="assessment-form" action="../includes/save_assessment.php" method="POST">
         <div class="form-group">
