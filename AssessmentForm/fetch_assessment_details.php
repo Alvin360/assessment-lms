@@ -1,8 +1,8 @@
 <?php
 require "db.php";
 
-$assessmentID = $_GET['assessmentID'];
-//$assessmentID = 'A66929e7ea';
+$assessmentID = $_GET['assessment_ID'];
+$userID = $_GET['user_ID'];
 
 $assessmentSQL = "SELECT assessment_Name, time_Limit FROM assessment WHERE assessment_ID = ?";
 $stmt = $conn->prepare($assessmentSQL);
