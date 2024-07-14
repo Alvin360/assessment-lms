@@ -1,32 +1,35 @@
 <?php
 require_once '../includes/dbh_inc.php';
 
-$assessmentID = $_GET['id']; // Assuming assessmentID is passed in the URL
-$subject_Code = $_GET['subject_Code'];
 
-$sqlSelectAssessment = "SELECT * FROM ASSESSMENT WHERE assessment_ID = ?";
+$assessmentID = $_GET['id']; // Assuming assessmentID is passed in the URL
+
+// Fetch assessment details
+$sqlSelectAssessment = "SELECT * FROM assessment WHERE assessment_ID = ?";
 $stmtSelectAssessment = $conn->prepare($sqlSelectAssessment);
 $stmtSelectAssessment->bind_param('s', $assessmentID);
 $stmtSelectAssessment->execute();
 $resultAssessment = $stmtSelectAssessment->get_result();
 $assessment = $resultAssessment->fetch_assoc();
 
-$sqlSelectQuestions = "SELECT * FROM EXAMINATION_BANK WHERE assessment_ID = ?";
+// Fetch questions related to the assessment
+$sqlSelectQuestions = "SELECT * FROM examination_bank WHERE assessment_ID = ?";
 $stmtSelectQuestions = $conn->prepare($sqlSelectQuestions);
 $stmtSelectQuestions->bind_param('s', $assessmentID);
 $stmtSelectQuestions->execute();
 $resultQuestions = $stmtSelectQuestions->get_result();
 
+// Function to fetch correct answers
 function fetchCorrectAnswers($questionID, $questionType, $conn) {
     $sql = "";
     switch ($questionType) {
         case 'M':
         case 'T':
         case 'S':
-            $sql = "SELECT answer FROM EXAM_ANSWER WHERE question_ID = ?";
+            $sql = "SELECT answer FROM exam_answer WHERE question_ID = ?";
             break;
         case 'F':
-            $sql = "SELECT m_Ans1, m_Ans2, m_Ans3, m_Ans4, m_Ans5, m_Ans6, m_Ans7, m_Ans8, m_Ans9, m_Ans10 FROM EXAM_ANSWER WHERE question_ID = ?";
+            $sql = "SELECT m_Ans1, m_Ans2, m_Ans3, m_Ans4, m_Ans5, m_Ans6, m_Ans7, m_Ans8, m_Ans9, m_Ans10 FROM exam_answer WHERE question_ID = ?";
             break;
         default:
             return ''; // Handle unknown question types
@@ -53,12 +56,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Assessment</title>
     <link rel="stylesheet" href="../styles.css">
-
-    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
 </head>
 <body>
     <!-- Header section containing the navigation bars -->
@@ -96,8 +95,6 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     <h2>Edit Assessment</h2>
     <form action="update_assessment.php" method="post">
         <input type="hidden" name="assessmentID" value="<?php echo $assessmentID; ?>">
-        <input type="hidden" name="subject_Code" value="<?php echo $subject_Code; ?>">
-
 
         <div class="form-group">
             <label for="assessmentName">Assessment Name:</label>
@@ -105,23 +102,23 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         </div>
         <div class="form-group">
             <label for="assessmentDesc">Instructions:</label>
-            <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_desc']) ? htmlspecialchars($assessment['assessment_desc']) : ''; ?>">
+            <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_Desc']) ? htmlspecialchars($assessment['assessment_Desc']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="timeLimit">Time Limit (Hour / Minutes):</label>
             <input type="text" id="timeLimit" name="timeLimit" value="<?php echo isset($assessment['time_Limit']) ? htmlspecialchars($assessment['time_Limit']) : ''; ?>" required>
         </div>
         <div class="form-group">
-            <label for="open_Date">Open Date:</label>
-            <input type="datetime-local" id="open_Date" name="open_Date" value="<?php echo isset($assessment['open_Date']) ? htmlspecialchars($assessment['open_Date']) : ''; ?>">
+            <label for="openDate">Open Date:</label>
+            <input type="datetime-local" id="openDate" name="openDate" value="<?php echo isset($assessment['open_Date']) ? htmlspecialchars($assessment['open_Date']) : ''; ?>">
         </div>
         <div class="form-group">
-            <label for="closing_Date">Closing Date:</label>
-            <input type="datetime-local" id="closing_Date" name="closing_Date" value="<?php echo isset($assessment['closing_Date']) ? htmlspecialchars($assessment['closing_Date']) : ''; ?>">
+            <label for="closingDate">Closing Date:</label>
+            <input type="datetime-local" id="closingDate" name="closingDate" value="<?php echo isset($assessment['closing_Date']) ? htmlspecialchars($assessment['closing_Date']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="allowedAttempts">Allowed Attempt:</label> 
-            <input type="number" id="allowedAttempts" name="allowedAttempts" value="<?php echo isset($assessment['allowed_attempts']) ? htmlspecialchars($assessment['allowed_attempts']) : ''; ?>" required>
+            <input type="number" id="allowedAttempts" name="allowedAttempts" value="<?php echo isset($assessment['allowed_Attempts']) ? htmlspecialchars($assessment['allowed_Attempts']) : ''; ?>" required>
         </div>
         <div id="existing-questions-container">
             <?php while ($question = $resultQuestions->fetch_assoc()): ?>
@@ -173,6 +170,9 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                             <?php for ($i = 1; $i <= 10; $i++): ?>
                                 <label for="match<?php echo $i; ?>-<?php echo $question['question_ID']; ?>">Match <?php echo $i; ?>:</label>
                                 <input type="text" id="match<?php echo $i; ?>-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][match][<?php echo $i - 1; ?>]" value="<?php echo htmlspecialchars($correctAnswers['m_Ans'.$i]); ?>" required>
+                                <br>
+                                <label for="m-ans<?php echo $i; ?>-<?php echo $question['question_ID']; ?>">Correct Answer <?php echo $i; ?>:</label>
+                                <input type="text" id="m-ans<?php echo $i; ?>-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][correctAnswer][<?php echo $i - 1; ?>]" value="<?php echo htmlspecialchars($correctAnswers['m_Ans'.$i]); ?>" required>
                                 <br>
                             <?php endfor; ?>
                         <?php endif; ?>
@@ -255,11 +255,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     optionsContainer.innerHTML += 
                         '<label for="match' + i + '-' + count + '">Match ' + i + ':</label>' +
                         '<input type="text" id="match' + i + '-' + count + '" name="newQuestions[' + count + '][match][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                        
-                        '<label for="m-ans' + i + '-' + count + '">Match Correct Answer ' + i + ':</label>' +
-                        '<select id="m-ans' + i + '-' + count + '" name="newQuestions[' + count + '][m_Ans' + i + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                            Array.from({ length: 10 }, (_, index) => '<option value="' + (index + 1) + '">Match ' + (index + 1) + '</option>').join('') +
-                        '</select>';
+                        '<label for="m-ans' + i + '-' + count + '">Correct Answer ' + i + ':</label>' +
+                        '<input type="text" id="m-ans' + i + '-' + count + '" name="newQuestions[' + count + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
             }
         }
@@ -292,8 +289,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     '<label for="boolean-' + questionID + '">Correct Answer (True/False):</label>' +
                     '<select id="boolean-' + questionID + '" name="questions[' + questionID + '][correctAnswer]" required>' +
                         '<option value="T">True</option>' +
-                        '<option value="F">False</option>' +
-                    '</select>';
+                        '<option value="F">False</option>';
             } else if (selectedType === 'S') {
                 optionsContainer.innerHTML = 
                     '<label for="fill-blank-' + questionID + '">Correct Answer:</label>' +
@@ -303,11 +299,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     optionsContainer.innerHTML += 
                         '<label for="match' + i + '-' + questionID + '">Match ' + i + ':</label>' +
                         '<input type="text" id="match' + i + '-' + questionID + '" name="questions[' + questionID + '][match][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                        
-                        '<label for="m-ans' + i + '-' + questionID + '">Match Correct Answer ' + i + ':</label>' +
-                        '<select id="m-ans' + i + '-' + questionID + '" name="questions[' + questionID + '][m_Ans' + i + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                            Array.from({ length: 10 }, (_, index) => '<option value="' + (index + 1) + '">Match ' + (index + 1) + '</option>').join('') +
-                        '</select>';
+                        '<label for="m-ans' + i + '-' + questionID + '">Correct Answer ' + i + ':</label>' +
+                        '<input type="text" id="m-ans' + i + '-' + questionID + '" name="questions[' + questionID + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
             }
         }

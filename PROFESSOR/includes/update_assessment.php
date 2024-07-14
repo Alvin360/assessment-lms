@@ -4,12 +4,11 @@ require_once '../includes/dbh_inc.php';
 
 // Function to update assessment
 function updateAssessment($conn, $data) {
-    $sql = "UPDATE ASSESSMENT SET assessment_Name = ?, date_Created = ?, open_Date = ?, creator_ID = ?, subject_Code = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, closing_Date = ?, assessment_Desc = ?, allowed_Attempts = ? WHERE assessment_ID = ?";
+    $sql = "UPDATE ASSESSMENT SET assessment_Name = ?, open_Date = ?, creator_ID = ?, subject_Code = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, closing_Date = ?, assessment_Desc = ?, allowed_Attempts = ? WHERE assessment_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        'sssssssissss', 
+        'ssssssissss', 
         $data['assessmentName'], 
-        $data['date_Created'], 
         $data['open_Date'],
         $data['creatorID'], 
         $data['subject_Code'], 
