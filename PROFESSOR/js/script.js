@@ -57,8 +57,8 @@ function populateAssessments(assessments) {
                           <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
                           <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
                       </div>
-                      <p>Opened: ${assessment.open_date}</p>
-                      <p>Due: ${assessment.closing_date}</p>
+                      <p>Opened: ${assessment.open_Date}</p>
+                      <p>Due: ${assessment.closing_Date}</p>
                       <div class="container_student" assessmentID="${assessment.assessment_id}">
                           <!-- Students will be populated here -->
                       </div>
