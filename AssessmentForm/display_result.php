@@ -12,8 +12,8 @@
         <p id="score"></p>
         <p id="grade"></p>
         <div class="button-container">
-            <a href="student_landing_page.php" class="button">Go to Student Landing Page</a>
-            <a href="student_report_page.php" class="button">Proceed to Student Report Page</a>
+            <a href="../LandingPage_Student/index.php" class="button">Go to Student Landing Page</a>
+            <a href="../Student_Report/student_report.html" class="button">Proceed to Student Report Page</a>
         </div>
     </div>
     <script>
