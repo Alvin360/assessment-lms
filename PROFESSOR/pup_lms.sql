@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307:3307
--- Generation Time: Jul 14, 2024 at 07:42 AM
+-- Generation Time: Jul 14, 2024 at 09:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,26 +29,26 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `assessment` (
   `assessment_ID` varchar(10) NOT NULL,
-  `assessment_Name` varchar(30) NOT NULL,
+  `assessment_Name` varchar(255) NOT NULL,
   `date_Created` datetime NOT NULL,
-  `open_date` datetime DEFAULT NULL,
+  `open_Date` datetime DEFAULT NULL,
   `creator_ID` varchar(12) DEFAULT NULL,
   `subject_Code` varchar(10) DEFAULT NULL,
   `assessment_Type` char(1) DEFAULT NULL,
-  `time_Limit` varchar(5) DEFAULT NULL,
+  `time_Limit` time DEFAULT NULL,
   `no_Of_Items` varchar(3) DEFAULT NULL,
-  `closing_date` datetime NOT NULL,
+  `closing_Date` datetime NOT NULL,
   `assessment_Desc` varchar(200) NOT NULL,
-  `allowed_attempts` int(11) NOT NULL
+  `allowed_Attempts` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `assessment`
 --
 
-INSERT INTO `assessment` (`assessment_ID`, `assessment_Name`, `date_Created`, `open_date`, `creator_ID`, `subject_Code`, `assessment_Type`, `time_Limit`, `no_Of_Items`, `closing_date`, `assessment_Desc`, `allowed_attempts`) VALUES
-('A669361683', 'Quiz 1: Auditing Theories', '2024-07-14 07:26:00', '2024-07-01 13:00:00', '201510754MN0', 'ACCO123', 'M', '00:50', '2', '2024-07-01 14:00:00', 'Select the correct answer', 1),
-('A669361ee8', 'Quiz 1: HTML', '2024-07-14 07:28:14', '2024-06-01 12:00:00', '201510754MN0', 'COMP124', 'M', '00:30', '1', '2024-06-01 23:59:00', 'Select the best answer', 1);
+INSERT INTO `assessment` (`assessment_ID`, `assessment_Name`, `date_Created`, `open_Date`, `creator_ID`, `subject_Code`, `assessment_Type`, `time_Limit`, `no_Of_Items`, `closing_Date`, `assessment_Desc`, `allowed_Attempts`) VALUES
+('A669361683', 'Quiz 1: Auditing Theories', '2024-07-14 07:26:00', '2024-07-01 13:00:00', '201510754MN0', 'ACCO123', 'M', '00:50:00', '2', '2024-07-01 14:00:00', 'Select the correct answer', 1),
+('A669361ee8', 'Quiz 1: HTML', '2024-07-14 07:28:14', '2024-06-01 12:00:00', '201510754MN0', 'COMP124', 'M', '00:30:00', '1', '2024-06-01 23:59:00', 'Select the best answer', 1);
 
 -- --------------------------------------------------------
 
@@ -191,17 +191,17 @@ INSERT INTO `examination_bank` (`assessment_ID`, `question_ID`, `question_No`, `
 CREATE TABLE `exam_answer` (
   `assessment_ID` varchar(10) NOT NULL,
   `question_ID` int(11) NOT NULL,
-  `answer` char(1) DEFAULT NULL,
-  `m_Ans1` char(1) DEFAULT NULL,
-  `m_Ans2` char(1) DEFAULT NULL,
-  `m_Ans3` char(1) DEFAULT NULL,
-  `m_Ans4` char(1) DEFAULT NULL,
-  `m_Ans5` char(1) DEFAULT NULL,
-  `m_Ans6` char(1) DEFAULT NULL,
-  `m_Ans7` char(1) DEFAULT NULL,
-  `m_Ans8` char(1) DEFAULT NULL,
-  `m_Ans9` char(1) DEFAULT NULL,
-  `m_Ans10` char(1) DEFAULT NULL
+  `answer` varchar(250) DEFAULT NULL,
+  `m_Ans1` varchar(250) DEFAULT NULL,
+  `m_Ans2` varchar(250) DEFAULT NULL,
+  `m_Ans3` varchar(250) DEFAULT NULL,
+  `m_Ans4` varchar(250) DEFAULT NULL,
+  `m_Ans5` varchar(250) DEFAULT NULL,
+  `m_Ans6` varchar(250) DEFAULT NULL,
+  `m_Ans7` varchar(250) DEFAULT NULL,
+  `m_Ans8` varchar(250) DEFAULT NULL,
+  `m_Ans9` varchar(250) DEFAULT NULL,
+  `m_Ans10` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -367,7 +367,7 @@ CREATE TABLE `user_examination` (
 CREATE TABLE `user_exam_report` (
   `user_ID` varchar(12) DEFAULT NULL,
   `assessment_ID` varchar(10) DEFAULT NULL,
-  `attempt_number` int(11) NOT NULL,
+  `attempt_Number` int(11) NOT NULL,
   `score` char(3) DEFAULT NULL,
   `grade` float DEFAULT NULL,
   `subject_Code` varchar(10) DEFAULT NULL,
@@ -444,8 +444,7 @@ INSERT INTO `user_role` (`user_ID`, `user_Role`, `date_Assigned`, `previous_Role
 --
 ALTER TABLE `assessment`
   ADD PRIMARY KEY (`assessment_ID`),
-  ADD KEY `creator_ID` (`creator_ID`),
-  ADD KEY `subject_id_ibfk1` (`subject_Code`);
+  ADD KEY `creator_ID` (`creator_ID`);
 
 --
 -- Indexes for table `cohort`

@@ -16,16 +16,18 @@ function populateAssessments(assessments) {
   const assessmentsContainer = document.getElementById('container_section_assessment');
   assessmentsContainer.innerHTML = '';
 
-  // Group assessments by subject code
+  // Group assessments by subject code and name
   const groupedAssessments = assessments.reduce((acc, assessment) => {
-      if (!acc[assessment.subject_Code]) {
-          acc[assessment.subject_Code] = [];
+      const subjectKey = `${assessment.subject_Code}: ${assessment.subject_name}`;
+      if (!acc[subjectKey]) {
+          acc[subjectKey] = [];
       }
-      acc[assessment.subject_Code].push(assessment);
+      acc[subjectKey].push(assessment);
       return acc;
   }, {});
 
-  // Create sections for each subject code
+  // Create sections for each subject code and name
+// Create sections for each subject code
   Object.keys(groupedAssessments).forEach(subjectCode => {
       const subjectSection = document.createElement('div');
       subjectSection.className = 'subject_section';
@@ -49,16 +51,17 @@ function populateAssessments(assessments) {
                       <button class="button_collapse hidden">Collapse</button>
                       <button class="button_expand">Expand</button>
                       <h2>${assessment.assessment_name}</h2>
-                  </div>
-  
-                  <div class="container_expanded hidden">
+
                       <div class="container_buttons">
                           <button class="button_export" data-id="${assessment.assessment_id}">Export</button>
                           <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
                           <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
                       </div>
-                      <p>Opened: ${assessment.open_date}</p>
-                      <p>Due: ${assessment.closing_date}</p>
+                  </div>
+  
+                  <div class="container_expanded hidden">
+                      <p>Opened: ${assessment.open_Date}</p>
+                      <p>Due: ${assessment.closing_Date}</p>
                       <div class="container_student" assessmentID="${assessment.assessment_id}">
                           <!-- Students will be populated here -->
                       </div>
@@ -98,7 +101,7 @@ function populateAssessments(assessments) {
           });
 
           assessmentCard.querySelector('.button_report').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/includes/report_page.php?assessment_id=${assessment.assessment_id}`;
+              window.location.href = `../PROFESSOR/pages/student_report.html?assessmentID=${assessment.assessment_id}`;
           });
 
           // Fetch and display students
@@ -257,4 +260,35 @@ document.addEventListener("DOMContentLoaded", () => {
   populateSelect("grade_category", grade_category);
   populateSelect("grade_attempts", grade_attempts);
   populateSelect("grading_method", grading_method);
+});
+
+
+
+
+// Student Report Page
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const assessmentID = urlParams.get('assessmentID');
+  const params = new URLSearchParams();
+  params.append('assessmentID', assessmentID);
+  fetch(`../includes/fetch_report_details.php?${params}`)
+      .then(response => response.json())
+      .then(data => {
+          const reportDetails = document.getElementById('report-details');
+          data.forEach(report => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                  <td>${report.user_ID}</td>
+                  <td>${report.attempt_Number}</td>
+                  <td>${report.score}</td>
+                  <td>${report.grade}</td>
+                  <td>${report.subject_Code}</td>
+                  <td>${report.date}</td>
+                  `;
+              reportDetails.appendChild(row);
+          });
+      })
+      .catch(error => console.error('Error fetching report details:', error));
 });

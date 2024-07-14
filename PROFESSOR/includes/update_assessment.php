@@ -4,19 +4,19 @@ require_once '../includes/dbh_inc.php';
 
 // Function to update assessment
 function updateAssessment($conn, $data) {
-    $sql = "UPDATE ASSESSMENT SET assessment_Name = ?, date_Created = ?, open_date = ?, creator_ID = ?, subject_Code = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, closing_Date = ?, assessment_Desc = ?, allowed_Attempts = ? WHERE assessment_ID = ?";
+    $sql = "UPDATE ASSESSMENT SET assessment_Name = ?, date_Created = ?, open_Date = ?, creator_ID = ?, subject_Code = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, closing_Date = ?, assessment_Desc = ?, allowed_Attempts = ? WHERE assessment_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
         'sssssssissss', 
         $data['assessmentName'], 
-        $data['date'], 
-        $data['open_date'],
+        $data['date_Created'], 
+        $data['open_Date'],
         $data['creatorID'], 
         $data['subject_Code'], 
         $data['assessmentType'], 
         $data['timeLimit'], 
         $data['noOfItems'], 
-        $data['closingDate'], 
+        $data['closing_Date'], 
         $data['assessmentDesc'], 
         $data['allowedAttempts'], 
         $data['assessmentID']
@@ -162,13 +162,13 @@ try {
     $data = [
         'assessmentID' => $assessmentID,
         'assessmentName' => $_POST['assessmentName'],
-        'date' => date('Y-m-d'),
-        'open_date' => $_POST['openDate'],
+        'date_Created' => date('Y-m-d'),
+        'open_Date' => $_POST['open_Date'],
         'creatorID' => $creatorID, // Replace with actual creator ID
         'subject_Code' => $_POST['subject_Code'], 
         'assessmentType' => 'Q',
         'timeLimit' => $_POST['timeLimit'],
-        'closingDate' => $_POST['closingDate'],
+        'closing_Date' => $_POST['closing_Date'],
         'assessmentDesc' => $_POST['assessmentDesc'],
         'allowedAttempts' => $_POST['allowedAttempts'],
         'noOfItems' => count($questions) + count($newQuestions),
@@ -199,10 +199,3 @@ try {
     echo "Error: " . $e->getMessage();
 }
 ?>
-
-
-
-
-
-
-

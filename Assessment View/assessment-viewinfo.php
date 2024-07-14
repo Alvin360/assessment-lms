@@ -42,7 +42,7 @@
     <div class="assessment-section">
         <?php
         session_start();
-        
+
         if (isset($_SESSION["user_ID"])) {
             $user_ID = $_SESSION["user_ID"];
             $servername = "localhost";
@@ -107,52 +107,47 @@
                         $open_date = $row["open_Date"];
                         $allowed_attempts = $row["allowed_Attempts"];
                     }
-                        
+
                     $sql_user_exam = $conn->prepare("SELECT attempt_number, score, date FROM user_exam_report WHERE user_ID = ? AND assessment_ID = ? AND subject_Code = ?");
                     $sql_user_exam->bind_param("sss", $user_ID, $assessment_ID, $subject_Code);
                     $sql_user_exam->execute();
                     $user_exam_result = $sql_user_exam->get_result();
 
                     $attempt_count = $user_exam_result->num_rows;
-
-                    //Check if there is an attempt already
+                    //Check first the attempt_number
+                    
                     if ($attempt_count > 0) {
                         //To show attempts data
                         echo "<p>Grades:</p>";
                         while ($exam_row = $user_exam_result->fetch_assoc()) {
                             echo "<p>Attempt " . htmlspecialchars($exam_row["attempt_number"]) . ": " . htmlspecialchars($exam_row["score"]) . " (Date: " . htmlspecialchars($exam_row["date"]) . ")</p>";
                         }
-                        //Check if allowed attempts was all used up
                         if ($attempt_count >= $allowed_attempts) {
                             echo "<button>Review</button>";
-                        //If there is still available attempts
                         } else if($current_date>=$open_date){
                             echo "<button>Review</button>";
                             echo "<button>Reattempt</button>";
                             echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
-                        }
-                        else{
+                        } else {
                             echo "<p>The assessment is not opened yet.</p>";
                         }
                     //When there is no attempt yet
                     } else {
-                        //Check if the assessment is still open
-                        if ($current_date <= $closing_date && $current_date>=$open_date) {
-                            echo '<button onclick="window.location.href=\'AssessmentForm/assessment_form.html\'">Start</button>';
-                        } else if($current_date<$open_date){
+                        if ($current_date <= $closing_date && $current_date >= $open_date) {
+                            echo "<button onclick=\"location.href='../AssessmentForm/assessment_form.html?assessment_ID=$assessment_ID&user_ID=$user_ID'\">Start</button>";
+                        } else if ($current_date < $open_date) {
                             echo "<p class='notif'>The assessment is still closed.</p>";
-                        }  
-                        //If closed already
+                        }   
                         else {
                             echo "<p class='notif'>The assessment is now closed. Contact your professor to open/reopen the exam.</p>";
-                        }   
+                        }
                     }
 
                     $sql_user_exam->close();
                 } else {
                     echo "No records found for Subject Code: " . htmlspecialchars($subject_Code) . " and Assessment ID: " . htmlspecialchars($assessment_ID);
                 }
-                
+
                 $sql_select->close();
             } else {
                 echo "Assessment ID and Subject Code are required.";

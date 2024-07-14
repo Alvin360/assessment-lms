@@ -80,12 +80,12 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
             <input type="text" id="timeLimit" name="timeLimit" value="<?php echo isset($assessment['time_Limit']) ? htmlspecialchars($assessment['time_Limit']) : ''; ?>" required>
         </div>
         <div class="form-group">
-            <label for="openDate">Open Date:</label>
-            <input type="datetime-local" id="openDate" name="openDate" value="<?php echo isset($assessment['open_date']) ? htmlspecialchars($assessment['open_date']) : ''; ?>">
+            <label for="open_Date">Open Date:</label>
+            <input type="datetime-local" id="open_Date" name="open_Date" value="<?php echo isset($assessment['open_Date']) ? htmlspecialchars($assessment['open_Date']) : ''; ?>">
         </div>
         <div class="form-group">
-            <label for="closingDate">Closing Date:</label>
-            <input type="datetime-local" id="closingDate" name="closingDate" value="<?php echo isset($assessment['closing_date']) ? htmlspecialchars($assessment['closing_date']) : ''; ?>">
+            <label for="closing_Date">Closing Date:</label>
+            <input type="datetime-local" id="closing_Date" name="closing_Date" value="<?php echo isset($assessment['closing_Date']) ? htmlspecialchars($assessment['closing_Date']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="allowedAttempts">Allowed Attempt:</label> 

@@ -139,6 +139,9 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                                 <label for="match<?php echo $i; ?>-<?php echo $question['question_ID']; ?>">Match <?php echo $i; ?>:</label>
                                 <input type="text" id="match<?php echo $i; ?>-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][match][<?php echo $i - 1; ?>]" value="<?php echo htmlspecialchars($correctAnswers['m_Ans'.$i]); ?>" required>
                                 <br>
+                                <label for="m-ans<?php echo $i; ?>-<?php echo $question['question_ID']; ?>">Correct Answer <?php echo $i; ?>:</label>
+                                <input type="text" id="m-ans<?php echo $i; ?>-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][correctAnswer][<?php echo $i - 1; ?>]" value="<?php echo htmlspecialchars($correctAnswers['m_Ans'.$i]); ?>" required>
+                                <br>
                             <?php endfor; ?>
                         <?php endif; ?>
                     </div>
@@ -220,11 +223,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     optionsContainer.innerHTML += 
                         '<label for="match' + i + '-' + count + '">Match ' + i + ':</label>' +
                         '<input type="text" id="match' + i + '-' + count + '" name="newQuestions[' + count + '][match][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                        
-                        '<label for="m-ans' + i + '-' + count + '">Match Correct Answer ' + i + ':</label>' +
-                        '<select id="m-ans' + i + '-' + count + '" name="newQuestions[' + count + '][m_Ans' + i + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                            Array.from({ length: 10 }, (_, index) => '<option value="' + (index + 1) + '">Match ' + (index + 1) + '</option>').join('') +
-                        '</select>';
+                        '<label for="m-ans' + i + '-' + count + '">Correct Answer ' + i + ':</label>' +
+                        '<input type="text" id="m-ans' + i + '-' + count + '" name="newQuestions[' + count + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
             }
         }
@@ -268,11 +268,8 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     optionsContainer.innerHTML += 
                         '<label for="match' + i + '-' + questionID + '">Match ' + i + ':</label>' +
                         '<input type="text" id="match' + i + '-' + questionID + '" name="questions[' + questionID + '][match][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                        
-                        '<label for="m-ans' + i + '-' + questionID + '">Match Correct Answer ' + i + ':</label>' +
-                        '<select id="m-ans' + i + '-' + questionID + '" name="questions[' + questionID + '][m_Ans' + i + ']" ' + (i <= 4 ? 'required' : '') + '>' +
-                            Array.from({ length: 10 }, (_, index) => '<option value="' + (index + 1) + '">Match ' + (index + 1) + '</option>').join('') +
-                        '</select>';
+                        '<label for="m-ans' + i + '-' + questionID + '">Correct Answer ' + i + ':</label>' +
+                        '<input type="text" id="m-ans' + i + '-' + questionID + '" name="questions[' + questionID + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
             }
         }
@@ -289,3 +286,6 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     </script>
 </body>
 </html>
+
+
+

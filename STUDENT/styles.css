@@ -1,0 +1,246 @@
+#landing_page {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex_row{
+    display: flex;
+    flex-direction: row;
+}
+
+#container_assessments_students {
+    width: 80%;
+}
+
+.card_topic {
+    margin-top: 1%;
+    width: 100%;
+}
+
+.container_assessment_student {
+    border: 1px solid #000000;
+    width: 100%;
+}
+
+/* Assessment View */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fdfdfd;
+    margin: 0;
+    padding: 0;
+}
+
+.assessment-section {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.assessment-section h2 {
+    text-align: center;
+    color: #b22222; 
+}
+
+.assessment-list {
+    margin-top: 20px;
+}
+
+.assessment-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.assessment-item h3 {
+    color: #b22222; 
+    margin-top: 0;
+}
+
+.assessment-item p {
+    margin: 5px 0;
+    color: #555;
+}
+
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ec1616; 
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #a11a1a;
+}
+
+.assessment_ID{
+    text-align: right; 
+}
+
+.notif{
+    text-align: center;
+}
+
+#back {
+    display: block;
+    width: 200px;
+    margin: 20px 0 20px 20px; /* Top, Right, Bottom, Left margins */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ec1616; 
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    align-content: left;
+}
+
+#back:hover {
+    background-color: #a11a1a;
+}
+
+
+/* ASSESSMENT FORM */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.assessment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.question p {
+    font-size: 18px;
+    margin: 0 0 10px;
+}
+
+.question label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #555;
+}
+
+.question input[type="radio"],
+.question input[type="text"],
+.question select {
+    margin-right: 10px;
+}
+
+.submit-button, .back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.submit-button:hover, .back-button:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+table select {
+    width: 100%;
+    padding: 5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.assessment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
