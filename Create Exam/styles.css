@@ -40,3 +40,23 @@ button {
     padding: 10px 20px;
     font-size: 16px;
 }
+
+#assessment-list {
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+}
+.assessment-item {
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.assessment-item h3 {
+    margin: 0;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+}

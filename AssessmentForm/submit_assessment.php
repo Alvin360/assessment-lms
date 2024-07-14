@@ -4,8 +4,8 @@ require "db.php";
 $assessmentID = $_POST['assessmentID'];
 $userID = $_POST['userID'];
 
-$assessmentID = 'A668c246ea';
-$userID = 'U1234567890';
+//$assessmentID = 'A66929e7ea';
+//$userID = 'U1234567890';
 
 // Collect all user answers
 $userAnswers = $_POST;
@@ -124,6 +124,14 @@ $stmt->bind_param("sssdss", $userID, $assessmentID, $earnedPoints, $grade, $subj
 $stmt->execute();
 $stmt->close();
 
+$dateEnd = date('Y-m-d');
+$timeEnd = date('H:i:s');
+
+$sql = "INSERT INTO user_examination (user_ID, assessment_ID, date_End, time_End, score, grade) VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ssssss", $userID, $assessmentID, $dateEnd, $timeEnd, $earnedPoints, $grade);
+$stmt->execute();
+$stmt->close();
 $conn->close();
 
 echo "Assessment submitted successfully. You earned $earnedPoints points. Your grade is $grade%.";

@@ -85,10 +85,19 @@ function updateAnswers($conn, $questionID, $questionData) {
 
 // Function to add new questions
 function addNewQuestions($conn, $newQuestions, $assessmentID) {
+    $maxQuestionNoSql = "SELECT MAX(question_No) as maxQuestionNo FROM EXAMINATION_BANK WHERE assessment_ID = ?";
+    $stmt = $conn->prepare($maxQuestionNoSql);
+    $stmt->bind_param('s', $assessmentID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $questionNo = $row['maxQuestionNo'] ?? 0;
+
     foreach ($newQuestions as $newQuestion) {
-        $sql = "INSERT INTO EXAMINATION_BANK (assessment_ID, question, question_Type, points) VALUES (?, ?, ?, ?)";
+        $questionNo++;
+        $sql = "INSERT INTO EXAMINATION_BANK (assessment_ID, question, question_Type, points, question_No) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sssi', $assessmentID, $newQuestion['text'], $newQuestion['type'], $newQuestion['points']);
+        $stmt->bind_param('sssii', $assessmentID, $newQuestion['text'], $newQuestion['type'], $newQuestion['points'], $questionNo);
         if (!$stmt->execute()) {
             return false;
         }
@@ -99,6 +108,7 @@ function addNewQuestions($conn, $newQuestions, $assessmentID) {
     }
     return true;
 }
+
 
 // Function to add new answers
 function addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID) {
