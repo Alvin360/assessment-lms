@@ -113,14 +113,33 @@ while ($questionData = $questionsResult->fetch_assoc()) {
     }
 }
 
+// Fetch the subject code related to the assessment
+$subjectCodeSQL = "SELECT subject_Code FROM assessment WHERE assessment_ID = ?";
+$stmt = $conn->prepare($subjectCodeSQL);
+$stmt->bind_param("s", $assessmentID);
+$stmt->execute();
+$result = $stmt->get_result();
+$subjectCodeData = $result->fetch_assoc();
+$subjectCode = $subjectCodeData['subject_Code'];
+$stmt->close();
+
 // Calculate the grade as a percentage
 $grade = ($totalPoints > 0) ? ($earnedPoints / $totalPoints) * 100 : 0;
 
-// Save the score (total correct points) and grade (percentage)
-$stmt = $conn->prepare("INSERT INTO user_exam_report (user_ID, assessment_ID, score, grade, subject_Code, date) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE score = VALUES(score), grade = VALUES(grade)");
-$subjectCode = "SUB123"; // Replace with actual subject code
+// Fetch the current attempt number
+$attemptSQL = "SELECT MAX(attempt_Number) as max_attempt FROM user_exam_report WHERE user_ID = ? AND assessment_ID = ?";
+$stmt = $conn->prepare($attemptSQL);
+$stmt->bind_param("ss", $userID, $assessmentID);
+$stmt->execute();
+$result = $stmt->get_result();
+$attemptData = $result->fetch_assoc();
+$attemptNumber = $attemptData['max_attempt'] + 1;
+$stmt->close();
+
+// Save the score (total correct points) and grade (percentage) with incremented attempt number
+$stmt = $conn->prepare("INSERT INTO user_exam_report (user_ID, assessment_ID, score, grade, subject_Code, date, attempt_Number) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE score = VALUES(score), grade = VALUES(grade), subject_Code = VALUES(subject_Code), attempt_number = attempt_number + 1");
 $date = date('Y-m-d');
-$stmt->bind_param("sssdss", $userID, $assessmentID, $earnedPoints, $grade, $subjectCode, $date);
+$stmt->bind_param("sssdssi", $userID, $assessmentID, $earnedPoints, $grade, $subjectCode, $date, $attemptNumber);
 $stmt->execute();
 $stmt->close();
 
@@ -134,5 +153,14 @@ $stmt->execute();
 $stmt->close();
 $conn->close();
 
-echo "Assessment submitted successfully. You earned $earnedPoints points. Your grade is $grade%.";
+$response = [
+    'score' => $earnedPoints,
+    'grade' => $grade,
+    'totalPoints' => $totalPoints
+];
+
+header('Content-Type: application/json');
+echo json_encode($response);
+
+
 ?>
