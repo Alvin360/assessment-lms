@@ -98,7 +98,7 @@ function populateAssessments(assessments) {
           });
 
           assessmentCard.querySelector('.button_report').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/includes/report_page.php?assessment_id=${assessment.assessment_id}`;
+              window.location.href = `../PROFESSOR/pages/student_report.html`;
           });
 
           // Fetch and display students
@@ -257,4 +257,32 @@ document.addEventListener("DOMContentLoaded", () => {
   populateSelect("grade_category", grade_category);
   populateSelect("grade_attempts", grade_attempts);
   populateSelect("grading_method", grading_method);
+});
+
+
+
+
+// Student Report Page
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('../includes/fetch_report_details.php')
+      .then(response => response.json())
+      .then(data => {
+          const reportDetails = document.getElementById('report-details');
+          data.forEach(report => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                  <td>${report.user_ID}</td>
+                  <td>${report.assessment_ID}</td>
+                  <td>${report.attempt_Number}</td>
+                  <td>${report.score}</td>
+                  <td>${report.grade}</td>
+                  <td>${report.subject_Code}</td>
+                  <td>${report.date}</td>
+                  `;
+              reportDetails.appendChild(row);
+          });
+      })
+      .catch(error => console.error('Error fetching report details:', error));
 });
