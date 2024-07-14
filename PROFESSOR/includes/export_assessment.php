@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
         }
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('i', $questionID); 
+        $stmt->bind_param('i', $questionID);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -55,9 +55,27 @@ if (isset($_GET['id'])) {
             $row = $result->fetch_assoc();
             return $row;
         } else {
-            return ''; 
+            return '';
         }
     }
+
+    function fetchMatchingAnswers($questionID, $conn) {
+        $sql = "SELECT m_Ans1, m_Ans2, m_Ans3, m_Ans4, m_Ans5, m_Ans6, m_Ans7, m_Ans8, m_Ans9, m_Ans10
+                FROM EXAM_ANSWER WHERE question_ID = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $questionID); 
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        } else {
+            return [];
+        }
+    }
+
+    
 
     // Generate PDF
     class PDF extends FPDF
@@ -88,14 +106,13 @@ if (isset($_GET['id'])) {
         function Footer()
         {
             if ($this->PageNo() == 1) {
-                
                 $this->SetY(-15);
                 $this->SetFont('Arial','I',8);
                 $this->Cell(0,10,$this->PageNo(),0,0,'C');
             }
         }
 
-        function Question($question, $number)
+        function Question($question, $number, &$matchingQuestions, &$matchingAnswers)
         {
             $this->SetFont('Arial','B',12);
             $this->Cell(0,10,$number.'. '.$question['question'],0,1);
@@ -106,23 +123,59 @@ if (isset($_GET['id'])) {
                 $col_width = $this->GetPageWidth() / 2 - 20;
 
                 for ($i = 0; $i < 2; $i++) {
-                    $this->Cell($col_width, 10, $choices[$i], 0, 0);
-                    $this->Cell($col_width, 10, $choices[$i+2], 0, 1);
+                    $this->Cell($col_width, 10, $choices[$i] ?? '', 0, 0);
+                    $this->Cell($col_width, 10, $choices[$i+2] ?? '', 0, 1);
                 }
+
             } elseif ($question['question_Type'] === 'T') {
                 $this->Cell(0,10,'a. True',0,1);
                 $this->Cell(0,10,'b. False',0,1);
             } elseif ($question['question_Type'] === 'S') {
                 $this->Cell(0,10,'_______________________',0,1);
             } elseif ($question['question_Type'] === 'F') {
-                for ($i = 1; $i <= 10; $i++) {
-                    $match = 'm_Ans' . $i;
-                    if ($question[$match]) {
-                        $this->Cell(0,10,$i.'. '.$question[$match],0,1);
+                    // Collect matching question
+                    for ($i = 1; $i <= 10; $i++) {
+                    $match = 'match' . $i;
+                    if (isset($question[$match]) && $question[$match]) {
+                        $matchingQuestions[] = $question[$match];
                     }
                 }
+
+                // Fetch matching answers
+                $answers = fetchMatchingAnswers($question['question_ID'], $GLOBALS['conn']);
+                for ($i = 1; $i <= 10; $i++) {
+                    $ans = 'm_Ans' . $i;
+                    if (isset($answers[$ans]) && $answers[$ans]) {
+                        $matchingAnswers[] = $answers[$ans];
+                    }
+                }
+
             }
             $this->Ln(5);
+        }
+
+        function MatchingQuestions($matchingQuestions, $matchingAnswers) {
+            $this->SetFont('Arial','B',12);
+            $this->Cell(0,10,'Match the following:', 0, 1, 'L');
+            $this->SetFont('Arial','',12);
+
+            $this->SetFillColor(230, 230, 230);
+            $this->Cell(0,10,'Questions:', 0, 1, 'L', true);
+            foreach ($matchingQuestions as $index => $question) {
+                $this->Cell(0,10,chr($index + 97).'. '.$question, 0, 1);
+            }
+
+            $this->Ln(5);
+            $this->SetFont('Arial','B',12);
+            $this->Cell(0,10,'Answers:', 0, 1, 'L');
+            $this->SetFont('Arial','',12);
+
+            // Shuffle the answers
+            shuffle($matchingAnswers);
+
+            foreach ($matchingAnswers as $index => $answer) {
+                $this->Cell(0,10,chr($index + 97).'. '.$answer, 0, 1);
+            }
         }
 
         function AnswerSheet($imagePath)
@@ -133,7 +186,6 @@ if (isset($_GET['id'])) {
             $this->Cell(0,10,'Answer Sheet',0,1,'C');
             $this->Ln(10);
 
-            
             $this->SetFont('Arial','',12);
             $this->Cell(20,10,'Name:',0,0);
             $this->Cell(60,10,'_________________________',0,0);
@@ -145,14 +197,13 @@ if (isset($_GET['id'])) {
             $this->Cell(60,10,'_________________________',0,1);
             $this->Ln(20);
 
-            
             $imageWidth = 170;
             $imageY = 90; 
             $imageX = 10;
             $this->Image($imagePath, $imageX, $imageY, $imageWidth);
         }
 
-        function AnswerKey($questions, $correctAnswersList)
+        function AnswerKey($questions, $correctAnswersList, $matchingQuestions, $matchingAnswers)
         {
             $this->AddPage();
             // Header for answer key
@@ -166,9 +217,16 @@ if (isset($_GET['id'])) {
             $this->SetFont('Arial','',12);
             foreach ($questions as $index => $question) {
                 $number = $index + 1;
-                $correctAnswer = strtoupper($correctAnswersList[$index]);
-                $this->Cell(0,10,$number.'. '.$correctAnswer,0,1);
+                if ($question['question_Type'] === 'F') {
+                    $correctAnswer = $correctAnswersList[$index];
+                    $this->Cell(0,10,$number.'. '.$correctAnswer,0,1);
+                } else {
+                    $correctAnswer = strtoupper($correctAnswersList[$index]);
+                    $this->Cell(0,10,$number.'. '.$correctAnswer,0,1);
+                }
             }
+
+
         }
     }
 
@@ -176,33 +234,57 @@ if (isset($_GET['id'])) {
     $pdf->AddPage();
     $number = 1;
     $correctAnswersList = [];
+    $matchingQuestions = [];
+    $matchingAnswers = [];
+
     foreach ($questions as $question) {
         $correctAnswers = fetchCorrectAnswers($question['question_ID'], $question['question_Type'], $conn);
-        $pdf->Question($question, $number);
-        $correctAnswer = $correctAnswers['answer'];
-        if ($question['question_Type'] === 'M') {
-            $correctAnswer = chr(96 + $correctAnswer); 
+        $pdf->Question($question, $number, $matchingQuestions, $matchingAnswers);
+        
+        // Determine correct answer based on question type
+        $correctAnswer = '';
+        if ($question['question_Type'] === 'M' && isset($correctAnswers['answer'])) {
+            $correctAnswerIndex = $correctAnswers['answer'];
+            $choices = ['a', 'b', 'c', 'd'];
+            $correctAnswer = $choices[$correctAnswerIndex - 1]; // Convert answer index to letter
         } elseif ($question['question_Type'] === 'T') {
-            $correctAnswer = $correctAnswer == 'T' ? 'A' : 'B';
+            $correctAnswer = $correctAnswers['answer'] == 'T' ? 'A' : 'B';
+        } elseif ($question['question_Type'] === 'S') {
+            $correctAnswer = $correctAnswers['answer'] ?? '';
+        } elseif ($question['question_Type'] === 'F') {
+            $correctAnswer = '';
+            for ($i = 1; $i <= 10; $i++) {
+                $match = 'match' . $i;
+                $ans = 'm_Ans' . $i;
+                if (isset($question[$match]) && isset($correctAnswers[$ans])) {
+                    $correctAnswer .= $i . '. ' . $question[$match] . "\n";
+                }
+            }
         }
+
+        
         $correctAnswersList[] = $correctAnswer;
         $number++;
     }
 
- 
+    // Add matching questions and answers section
+    if (!empty($matchingQuestions)) {
+        $pdf->MatchingQuestions($matchingQuestions, $matchingAnswers);
+    }
+
     if ($includeAnswerSheet) {
-        $pdf->AnswerSheet('ans_sheet.png'); 
+        $pdf->AnswerSheet('ans_sheet.png'); // Path to the answer sheet image
     }
 
     if ($includeAnswerKey) {
-        $pdf->AnswerKey($questions, $correctAnswersList);
+        $pdf->AnswerKey($questions, $correctAnswersList, $matchingQuestions, $matchingAnswers);
     }
 
+    // Avoid any output before this point
+    ob_clean();
     $pdf->Output();
 }
 ?>
-
-
 
 
 
