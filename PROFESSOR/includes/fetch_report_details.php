@@ -1,7 +1,9 @@
 <?php
     require_once '../includes/dbh_inc.php';
 
-    $query = "SELECT user_ID, assessment_ID, attempt_Number, score, grade, subject_Code, date FROM user_exam_report";
+    $assessmentID = $_GET['assessmentID']; 
+    
+    $query = "SELECT user_ID, attempt_Number, score, grade, subject_Code, date FROM user_exam_report WHERE assessment_ID='$assessmentID'";
     $result = $conn->query($query);
 
     $reportDetails = array();

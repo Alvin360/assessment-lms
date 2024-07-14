@@ -101,7 +101,7 @@ function populateAssessments(assessments) {
           });
 
           assessmentCard.querySelector('.button_report').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/pages/student_report.html`;
+              window.location.href = `../PROFESSOR/pages/student_report.html?assessmentID=${assessment.assessment_id}`;
           });
 
           // Fetch and display students
@@ -269,7 +269,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  fetch('../includes/fetch_report_details.php')
+  const urlParams = new URLSearchParams(window.location.search);
+  const assessmentID = urlParams.get('assessmentID');
+  const params = new URLSearchParams();
+  params.append('assessmentID', assessmentID);
+  fetch(`../includes/fetch_report_details.php?${params}`)
       .then(response => response.json())
       .then(data => {
           const reportDetails = document.getElementById('report-details');
@@ -277,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
               const row = document.createElement('tr');
               row.innerHTML = `
                   <td>${report.user_ID}</td>
-                  <td>${report.assessment_ID}</td>
                   <td>${report.attempt_Number}</td>
                   <td>${report.score}</td>
                   <td>${report.grade}</td>
