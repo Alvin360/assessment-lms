@@ -1,13 +1,10 @@
 <?php
 require "db.php";
 
-$assessmentID = $_POST['assessmentID'];
-$userID = $_POST['userID'];
+$assessmentID = $_POST['assessment_ID'];
+$userID = $_POST['user_ID'];
 
-//$assessmentID = 'A66929e7ea';
-//$userID = 'U1234567890';
 
-// Collect all user answers
 $userAnswers = $_POST;
 
 // Fetch all questions related to the assessment
