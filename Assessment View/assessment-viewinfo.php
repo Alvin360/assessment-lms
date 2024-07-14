@@ -39,21 +39,23 @@
                         echo "Username: " . htmlspecialchars($_SESSION["user_ID"]) . "<br>";
                         echo "<h2>" . htmlspecialchars($row["assessment_Name"]) . "</h2>";
                         echo "<p class='assessment_ID'>Assessment ID: " . htmlspecialchars($row["assessment_ID"]) . "</p>";
+                        echo "<p class='assessment_ID'>Date Created: " . htmlspecialchars($row["date_Created"]) . "</p>";
                         echo "<div class='assessment-item'>";
                         echo "<h3>Subject Code: " . htmlspecialchars($row["subject_Code"]) . "</h3>";
                         echo "<p>Creator ID: " . htmlspecialchars($row["creator_ID"]) . "</p>";
-                        echo "<p>Date Created: " . htmlspecialchars($row["date_created"]) . "</p>";
-                        echo "<p>Closing Date: " . htmlspecialchars($row["closing_date"]) . "</p>";
+                        echo "<p>Will open on: " . htmlspecialchars($row["open_Date"]) . "</p>";
+                        echo "<p>Will close on: " . htmlspecialchars($row["closing_Date"]) . "</p>";
                         echo "<hr/>";
-                        echo "<p>Allowed Attempts: " . htmlspecialchars($row["allowed_attempts"]) . "</p>";
+                        echo "<p>Allowed Attempts: " . htmlspecialchars($row["allowed_Attempts"]) . "</p>";
                         echo "<p>Assessment Type: " . htmlspecialchars($row["assessment_Type"]) . "</p>";
                         echo "<p>No. of Items: " . htmlspecialchars($row["no_Of_Items"]) . "</p>";
                         echo "<hr/>";
                         echo "</div>";
 
                         $current_date = date("Y-m-d H:i:s");
-                        $closing_date = $row["closing_date"];
-                        $allowed_attempts = $row["allowed_attempts"];
+                        $closing_date = $row["closing_Date"];
+                        $open_date = $row["open_Date"];
+                        $allowed_attempts = $row["allowed_Attempts"];
                     }
                         
                     $sql_user_exam = $conn->prepare("SELECT attempt_number, score, date FROM user_exam_report WHERE user_ID = ? AND assessment_ID = ? AND subject_Code = ?");
@@ -63,6 +65,7 @@
 
                     $attempt_count = $user_exam_result->num_rows;
                     //Check first the attempt_number
+                    
                     if ($attempt_count > 0) {
                         echo "<p>Grades:</p>";
                         while ($exam_row = $user_exam_result->fetch_assoc()) {
@@ -71,16 +74,23 @@
                         //Check if allowed attempts was all used up
                         if ($attempt_count >= $allowed_attempts) {
                             echo "<button>Review</button>";
-                        } else {
+                        } else if($current_date>=$open_date){
+                            echo "<button>Review</button>";
                             echo "<button>Reattempt</button>";
                             echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
                         }
+                        else{
+                            echo "<p>The assessment is not opened yet.</p>";
+                        }
                     } else {
                         //Check if the assessment is still open
-                        if ($current_date <= $closing_date) {
-                            echo "<button>Start</button>";
-                        } else {
-                            echo "<p class='notif'>The assessment is now closed. Contact your professor to reopen the exam.</p>";
+                        if ($current_date <= $closing_date && $current_date>=$open_date) {
+                            echo '<button onclick="window.location.href=\'AssessmentForm/assessment_form.html\'">Start</button>';
+                        } else if($current_date<$open_date){
+                            echo "<p class='notif'>The assessment is still closed.</p>";
+                        }   
+                        else {
+                            echo "<p class='notif'>The assessment is now closed. Contact your professor to open/reopen the exam.</p>";
                         }   
                     }
 
@@ -98,7 +108,7 @@
         } else {
             echo "User ID not set in session.";
         }
-        echo "<button id = 'back'>Back</button>";
+        echo '<button id="back" onclick="window.location.href=\'session.php\'">Back</button>';
         ?>
     </div>
 </body>
