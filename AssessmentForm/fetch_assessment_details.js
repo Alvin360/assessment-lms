@@ -117,25 +117,21 @@ function setupTimer(timeLimit) {
 }
 
 async function submitAssessment() {
-    // Get form data
     const formData = new FormData(document.getElementById('assessment-form'));
 
-    // Submit assessment to the server
     const response = await fetch('submit_assessment.php', {
         method: 'POST',
         body: formData
     });
 
-    // Show the result of the submission
-    const result = await response.text();
-    alert(result);
+    const result = await response.json();
+    window.location.href = `display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Fetch assessment details when the page is loaded
-    fetchAssessmentDetails();
 
-    // Submit assessment when the form is submitted
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAssessmentDetails();
     document.getElementById('assessment-form').addEventListener('submit', event => {
         event.preventDefault();
         submitAssessment();
