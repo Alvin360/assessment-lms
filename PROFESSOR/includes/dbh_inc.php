@@ -4,7 +4,7 @@ $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "";
 $dbname = "pup_lms";
-$port = "3306";
+$port = "3307";
 
 $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname, $port);
 

@@ -66,7 +66,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     <header>
             <div class="top-bar">
                 <div class="logo">
-                    <img src="logo.png" alt="PUP">
+                    <img src="../assets/logo.png" alt="PUP">
                 </div>
                 <nav class="main-nav">
                     <ul>

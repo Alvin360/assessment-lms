@@ -68,8 +68,8 @@ function populateAssessments(assessments) {
             assessmentCard.innerHTML = `
                 <div class="container_assessment">
                     <div class="container_collapsed">
-                        <button class="button_collapse hidden">Collapse</button>
-                        <button class="button_expand">Expand</button>
+                        <button class="button_collapse hidden"></button>
+                        <button class="button_expand"></button>
                         <h2>${assessment.assessment_name}</h2>
 
                         <div class="container_buttons">
@@ -313,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(data => {
           const reportDetails = document.getElementById('report-details');
           data.forEach(report => {
+                console.log(report);
               const row = document.createElement('tr');
               row.innerHTML = `
                   <td>${report.user_ID}</td>
@@ -328,3 +329,27 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => console.error('Error fetching report details:', error));
 });
+
+//navbar
+document.getElementById("more-white").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-white")[0].classList.toggle("toggle-in");
+  })
+  
+  //navbar
+  document.getElementById("more-red").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-red")[0].classList.toggle("toggle-in");
+  })
+  
+  //profile
+  document.getElementById("profile").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-profile")[0].classList.toggle("toggle-in");
+  })
+  
+  //drawer
+  document.getElementsByClassName("toggle-hamburger")[0].addEventListener("click", function(){
+    document.getElementById("drawer").classList.toggle("enter-from-left");
+  })
+  
+  document.getElementsByClassName("close-button")[0].addEventListener("click", function(){
+    document.getElementById("drawer").classList.toggle("enter-from-left");
+  })

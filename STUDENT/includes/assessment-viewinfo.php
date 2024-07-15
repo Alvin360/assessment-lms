@@ -17,7 +17,7 @@
     <header>
             <div class="top-bar">
                 <div class="logo">
-                    <img src="logo.png" alt="PUP">
+                    <img src="../assets/logo.png" alt="PUP">
                 </div>
                 <nav class="main-nav">
                     <ul>
@@ -48,11 +48,10 @@
     <!-- section containing the assessment page -->
     <div class="assessment-section">
         <?php
-        $user_ID = '202110755MN0';
-
         if (isset($_GET['assessment_ID']) && isset($_GET['subject_Code'])) {
             $assessment_ID = $_GET['assessment_ID'];
             $subject_Code = $_GET['subject_Code'];
+            $user_ID = $_SESSION["user_ID"];
 
             // Fetch the subject name using subject_Code
             $sql_subject = $conn->prepare("SELECT subject_Name FROM subject WHERE subject_ID = ?");
@@ -96,9 +95,9 @@
                     echo "</div>";
 
                     //Assign date values to check whether the assessment is open or not
-                    $current_date = date("Y-m-d H:i:s");
-                    $closing_date = $row["closing_Date"];
-                    $open_date = $row["open_Date"];
+                    $current_date = new DateTime($row["date_Created"]);
+                    $closing_date = new DateTime($row["closing_Date"]);
+                    $open_date = new DateTime($row["open_Date"]);
                     $allowed_attempts = $row["allowed_Attempts"];
                 }
                     
@@ -121,7 +120,7 @@
                         echo "<p>No more attempts...</p>";
                     //If there is still available attempts
                     } else if($current_date>=$open_date){
-                        echo "<button>Reattempt</button>";
+                        echo '<button onclick="window.location.href=\'../pages/assessment_form.html?attempt_number='. htmlspecialchars(($attempt_count + 1), ENT_QUOTES) .'&assessmentID=' . $assessment_ID . '\'">Reattempt</button>';
                         echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
                     }
                     else{
