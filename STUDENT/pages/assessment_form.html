@@ -6,6 +6,21 @@
     <title>Assessment Form</title>
     <link rel="stylesheet" href="../styles.css">
     <script src="../js/fetch_assessment_details.js" defer></script>
+    <script>
+        // Prevent back navigation
+        window.history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', function () {
+            window.history.pushState(null, '', window.location.href);
+            alert("Back button is disabled during the assessment.");
+        });
+
+        // Confirm before leaving the page
+        window.addEventListener('beforeunload', function (e) {
+            var confirmationMessage = "Are you sure you want to procced?";
+            e.returnValue = confirmationMessage; // Gecko, Trident, Chrome 34+
+            return confirmationMessage;          // Gecko, WebKit, Chrome <34
+        });
+    </script>
 </head>
 <body>
     <!-- Header section containing the navigation bars -->

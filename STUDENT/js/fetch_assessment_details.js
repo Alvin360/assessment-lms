@@ -129,11 +129,13 @@ async function submitAssessment() {
 }
 
 
-
 document.addEventListener('DOMContentLoaded', () => {
     fetchAssessmentDetails();
     document.getElementById('assessment-form').addEventListener('submit', event => {
         event.preventDefault();
-        submitAssessment();
+        const confirmed = confirm('Are you sure you want to submit the assessment?');
+        if (confirmed) {
+            submitAssessment();
+        }
     });
 });
