@@ -84,10 +84,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #a11a1a;
-}
-
 .assessment_ID{
     text-align: right; 
 }
@@ -324,4 +320,27 @@ header {
     font-weight: bold;
 }
 
+.start-status {
+    background-color: #B5B5B5;
+}
 
+.reattempt-status {
+    background-color: orange;
+}
+
+.view-details-status {
+    background-color: #00D415;
+}
+
+.missed-status {
+    background-color: #AE0000;
+}
+
+.assessment-button {
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}

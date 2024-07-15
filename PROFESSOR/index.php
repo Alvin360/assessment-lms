@@ -18,6 +18,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assessment</title>
     <link href="../PROFESSOR/styles.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -55,8 +57,19 @@
 
     <div id="landing_page">
         <div class="flex_row">
-            <button onclick="window.location.href='../PROFESSOR/pages/create_assessment.html'">+ Add Assessment</button>
+            <div class="flex_row">
+                <button onclick="window.location.href='../PROFESSOR/pages/create_assessment.html'">+ Add Assessment</button>
+            </div>
+
+            <div id="filter-container">
+                    <label for="course-filter">Filter by Course:</label>
+                    <select id="course-filter">
+                        <option value="all">All Courses</option>
+                        <!-- Populate with course options dynamically -->
+                    </select>
+            </div>
         </div>
+
 
         <div id="container_assessments_subject">
             <h1 id='section1'></h1>

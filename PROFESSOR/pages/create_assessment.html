@@ -84,6 +84,7 @@
     <script>
         let questionCount = 0;
 
+        
         function addQuestion() {
             questionCount++;
             const questionsContainer = document.getElementById('questions-container');
@@ -105,6 +106,9 @@
                 </select>
 
                 <div id="options-${questionCount}" class="options-container"></div>
+                <br>
+                <label for="points">Points:</label>
+                <input type="number" id="points" name="points" required>
             `;
 
             questionsContainer.appendChild(questionDiv);

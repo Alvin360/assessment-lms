@@ -75,8 +75,6 @@ if (isset($_GET['id'])) {
         }
     }
 
-    
-
     // Generate PDF
     class PDF extends FPDF
     {
@@ -133,8 +131,8 @@ if (isset($_GET['id'])) {
             } elseif ($question['question_Type'] === 'S') {
                 $this->Cell(0,10,'_______________________',0,1);
             } elseif ($question['question_Type'] === 'F') {
-                    // Collect matching question
-                    for ($i = 1; $i <= 10; $i++) {
+                // Collect matching question
+                for ($i = 1; $i <= 10; $i++) {
                     $match = 'match' . $i;
                     if (isset($question[$match]) && $question[$match]) {
                         $matchingQuestions[] = $question[$match];
@@ -149,7 +147,6 @@ if (isset($_GET['id'])) {
                         $matchingAnswers[] = $answers[$ans];
                     }
                 }
-
             }
             $this->Ln(5);
         }
@@ -225,8 +222,6 @@ if (isset($_GET['id'])) {
                     $this->Cell(0,10,$number.'. '.$correctAnswer,0,1);
                 }
             }
-
-
         }
     }
 
@@ -244,7 +239,7 @@ if (isset($_GET['id'])) {
         // Determine correct answer based on question type
         $correctAnswer = '';
         if ($question['question_Type'] === 'M' && isset($correctAnswers['answer'])) {
-            $correctAnswerIndex = $correctAnswers['answer'];
+            $correctAnswerIndex = (int)$correctAnswers['answer']; // Convert answer to integer
             $choices = ['a', 'b', 'c', 'd'];
             $correctAnswer = $choices[$correctAnswerIndex - 1]; // Convert answer index to letter
         } elseif ($question['question_Type'] === 'T') {
@@ -262,7 +257,6 @@ if (isset($_GET['id'])) {
             }
         }
 
-        
         $correctAnswersList[] = $correctAnswer;
         $number++;
     }

@@ -1,16 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('../PROFESSOR/includes/get_assessment_details_prof.php')
-      .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-      })
-      .then(assessments => {
-          populateAssessments(assessments);
-      })
-      .catch(error => console.error('Error:', error));
+    // Fetch and populate course filter options
+    fetch('../PROFESSOR/includes/get_courses.php')
+        .then(response => response.json())
+        .then(courses => {
+            const courseFilter = document.getElementById('course-filter');
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.course_ID;
+                option.textContent = course.course_ID;
+                option.text = course.course_ID;
+                courseFilter.appendChild(option);
+            });
+        });
+
+    // Fetch and populate assessments initially
+    fetchAssessments();
+
+    // Add event listener to course filter
+    document.getElementById('course-filter').addEventListener('change', (event) => {
+        const selectedCourse = event.target.value;
+        fetchAssessments(selectedCourse);
+    });
 });
+
+function fetchAssessments(course_ID = 'all') {
+    fetch(`../PROFESSOR/includes/get_assessment_details_prof.php?course_ID=${course_ID}`)
+        .then(response => response.json())
+        .then(assessments => {
+            populateAssessments(assessments);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
 
 function populateAssessments(assessments) {
   const assessmentsContainer = document.getElementById('container_section_assessment');
@@ -27,7 +48,6 @@ function populateAssessments(assessments) {
   }, {});
 
   // Create sections for each subject code and name
-// Create sections for each subject code
   Object.keys(groupedAssessments).forEach(subjectCode => {
       const subjectSection = document.createElement('div');
       subjectSection.className = 'subject_section';
@@ -53,18 +73,35 @@ function populateAssessments(assessments) {
                       <h2>${assessment.assessment_name}</h2>
 
                       <div class="container_buttons">
-                          <button class="button_export" data-id="${assessment.assessment_id}">Export</button>
+                          <button class="button_export" onclick="toggleDropdown('${assessment.assessment_ID}')" data-id="${assessment.assessment_id}">Export</button>
                           <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
                           <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
                       </div>
                   </div>
-  
+
                   <div class="container_expanded hidden">
                       <p>Opened: ${assessment.open_Date}</p>
                       <p>Due: ${assessment.closing_Date}</p>
                       <div class="container_student" assessmentID="${assessment.assessment_id}">
                           <!-- Students will be populated here -->
                       </div>
+                  </div>
+              </div>
+              <div id="dropdown-${assessment.assessment_id}" class="dropdown-content hidden">
+                  <div>
+                      <input type="checkbox" class="checkbox" id="include-answer-key-${assessment.assessment_id}">
+                      <label for="include-answer-key-${assessment.assessment_id}">Include Answer Key</label>
+                  </div>
+                  <div>
+                      <input type="checkbox" class="checkbox" id="include-answer-sheet-${assessment.assessment_id}">
+                      <label for="include-answer-sheet-${assessment.assessment_id}">Include Answer Sheet</label>
+                  </div>
+                  <div>
+                      <input type="checkbox" class="checkbox" id="shuffle-questions-${assessment.assessment_id}">
+                      <label for="shuffle-questions-${assessment.assessment_id}">Shuffle Questions</label>
+                  </div>
+                  <div>
+                      <button onclick="exportAssessment('${assessment.assessment_id}')">Export PDF</button>
                   </div>
               </div>
           `;
@@ -92,8 +129,9 @@ function populateAssessments(assessments) {
           });
 
           // Add event listeners for export, edit, and report buttons
-          assessmentCard.querySelector('.button_export').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/includes/export_assessment.php?id=${assessment.assessment_id}`;
+          assessmentCard.querySelector('.button_export').addEventListener('click', (e) => {
+              e.stopPropagation();
+              toggleDropdown(assessment.assessment_id);
           });
 
           assessmentCard.querySelector('.button_edit').addEventListener('click', () => {
@@ -110,69 +148,102 @@ function populateAssessments(assessments) {
   });
 }
 
+function toggleDropdown(id) {
+  const dropdown = document.getElementById(`dropdown-${id}`);
+  const isHidden = dropdown.classList.contains('hidden');
+  document.querySelectorAll('.dropdown-content').forEach(dd => dd.classList.add('hidden')); // Hide other dropdowns
+  if (isHidden) {
+      dropdown.classList.remove('hidden');
+  } else {
+      dropdown.classList.add('hidden');
+  }
+}
+
+function exportAssessment(assessmentID) {
+  const includeAnswerKey = document.getElementById(`include-answer-key-${assessmentID}`).checked;
+  const includeAnswerSheet = document.getElementById(`include-answer-sheet-${assessmentID}`).checked;
+  const shuffleQuestions = document.getElementById(`shuffle-questions-${assessmentID}`).checked;
+
+  // Here you can implement the logic to export the assessment with the selected options
+  console.log(`Exporting assessment ${assessmentID} with options:`, {
+      includeAnswerKey,
+      includeAnswerSheet,
+      shuffleQuestions
+  });
+
+  // Example AJAX request to export the assessment
+  fetch(`../PROFESSOR/includes/export_assessment.php`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          assessmentID,
+          includeAnswerKey,
+          includeAnswerSheet,
+          shuffleQuestions
+      })
+  })
+  .then(response => response.json())
+  .then(data => {
+      // Handle the response
+      console.log('Export successful:', data);
+      // Optionally, you can redirect or show a success message
+  })
+  .catch(error => {
+      console.error('Error exporting assessment:', error);
+  });
+}
 function fetchAndDisplayStudents(assessmentID, subjectCode) {
-  fetch(`../PROFESSOR/includes/assessment_prof_model.php?assessment_ID='${assessmentID}'&subject_Code='${subjectCode}'`)
-    .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-      })
-    .then(students => {
-          const studentContainers = document.querySelectorAll('.container_student');
-          studentContainers.forEach(container => {
-              if (container.getAttribute('assessmentid') === assessmentID) {
-                  displayStudents(container, students, assessmentID);
-              }
-          });
-      })
-    .catch(error => {
-          console.error('Error:', error);
-      });
+    fetch(`../PROFESSOR/includes/assessment_prof_model.php?assessment_ID='${assessmentID}'&subject_Code='${subjectCode}'`)
+      .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+      .then(students => {
+            const studentContainers = document.querySelectorAll('.container_student');
+            studentContainers.forEach(container => {
+                if (container.getAttribute('assessmentid') === assessmentID) {
+                    displayStudents(container, students, assessmentID);
+                }
+            });
+        })
+      .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function displayStudents(container, students) {
-  container.innerHTML = '';
+    container.innerHTML = '';
 
-  students.forEach(student => {
-      const studentElement = document.createElement('div');
-      studentElement.className = 'card_student';
+    students.forEach(student => {
+        const studentElement = document.createElement('div');
+        studentElement.className = 'card_student';
 
-      const h3Element = document.createElement('h3');
-      h3Element.textContent = student.name;
+        const h3Element = document.createElement('h3');
+        h3Element.textContent = student.name;
 
-      const reviewButton = document.createElement('div');
-      reviewButton.className = 'review-button';
+        const reviewButton = document.createElement('div');
+        reviewButton.className = 'review-button';
 
-      // Set the button text based on the 'attempted' flag
-      reviewButton.textContent = student.attempted ? 'Done' : 'Not Attempted';
+        // Set the button text based on the 'attempted' flag
+        reviewButton.textContent = student.attempted ? 'Done' : 'Not Attempted';
 
-      if (student.attempted) {
-        reviewButton.classList.add('button-done');
-        reviewButton.classList.remove('button-not-attempted');
-    } else {
-        reviewButton.classList.add('button-not-attempted');
-        reviewButton.classList.remove('button-done');
-    }
+        if (student.attempted) {
+          reviewButton.classList.add('button-done');
+          reviewButton.classList.remove('button-not-attempted');
+      } else {
+          reviewButton.classList.add('button-not-attempted');
+          reviewButton.classList.remove('button-done');
+      }
 
-      // if (!student.attempted) {
-      //   reviewButton.disabled = true; // Disable the button if not attempted
-      // } 
-      // else {
-      //     reviewButton.addEventListener('click', () => {
-      //         const assessmentID = student.assessmentID;
-      //         console.log(`Reviewing attempted assessment for student: ${student.name}, assessment ID: ${assessmentID}`);
-      //         // Redirect to PHP file with parameters
-      //         window.location.href = `../PROFESSOR/includes/review.php?assessmentID=${assessmentID}&user_ID=${student.user_ID}}`;
-      //     });
-      // }
+        studentElement.appendChild(h3Element);
+        studentElement.appendChild(reviewButton);
 
-      studentElement.appendChild(h3Element);
-      studentElement.appendChild(reviewButton);
-
-      // Append the studentElement to the container
-      container.appendChild(studentElement);
-  });
+        container.appendChild(studentElement);
+    });
 }
 
 // Create Exam folder
@@ -210,7 +281,7 @@ const time_limit_expire = [
 //   Might not be constant but updated if a teacher adds new grading category
 const grade_category = ["Uncategorized"];
 const grade_attempts = Array.from({ length: 10 }, (_, i) => i + 1);
-const grading_method = ["Highest grade", "Average grade", "First attempt", "Last attempt"]
+const grading_method = ["Highest grade", "Average grade", "First attempt", "Last attempt"];
 
 function populateSelect(selectId, values, defaultValue) {
   const select = document.getElementById(selectId);
@@ -270,11 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateSelect("grading_method", grading_method);
 });
 
-
-
-
 // Student Report Page
-
 
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -289,12 +356,13 @@ document.addEventListener('DOMContentLoaded', function() {
               const row = document.createElement('tr');
               row.innerHTML = `
                   <td>${report.user_ID}</td>
+                  <td>${report.student_name}</td>
                   <td>${report.attempt_Number}</td>
                   <td>${report.score}</td>
                   <td>${report.grade}</td>
                   <td>${report.subject_Code}</td>
                   <td>${report.date}</td>
-                  `;
+              `;
               reportDetails.appendChild(row);
           });
       })
