@@ -24,7 +24,7 @@
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Dashboard</a></li>
                         <li><a href="#">My courses</a></li>
-                        <li><a href="../index.php">Assessment</a></li>
+                        <li><a href="../landing_page.php">Assessment</a></li>
                     </ul>
                 </nav>
                 <nav class="profile-nav">
@@ -77,21 +77,28 @@
             if ($result->num_rows > 0) {
                 echo "<div class='assessment-list'>";
                 while ($row = $result->fetch_assoc()) {
+                    $dateCreated = new DateTime($row["date_Created"]);
+                    $openDate = new DateTime($row["open_Date"]);
+                    $closingDate = new DateTime($row["closing_Date"]);
+                    
                     //Display data
                     //echo "Username: " . htmlspecialchars($_SESSION["user_ID"]) . "<br>";
                     echo "<h2>" . htmlspecialchars($row["assessment_Name"]) . "</h2>";
                     echo "<p class='assessment_ID'>Assessment ID: " . htmlspecialchars($row["assessment_ID"]) . "</p>";
-                    echo "<p class='assessment_ID'>Date Created: " . htmlspecialchars($row["date_Created"]) . "</p>";
+                    echo "<p class='assessment_ID'>Date Created: " . htmlspecialchars(strftime('%d, %B %Y, %I:%M %p', $dateCreated->getTimestamp())) . "</p>";
                     echo "<div class='assessment-item'>";
                     echo "<h3>" . htmlspecialchars($row["subject_Code"]) . ": " . htmlspecialchars($subject_Name) . "</h3>";
                     echo "<p>Creator ID: " . htmlspecialchars($row["creator_ID"]) . "</p>";
-                    echo "<p>Will open on: " . htmlspecialchars($row["open_Date"]) . "</p>";
-                    echo "<p>Will close on: " . htmlspecialchars($row["closing_Date"]) . "</p>";
+                    echo "<p>Will open on: " . htmlspecialchars(strftime('%d, %B %Y, %I:%M %p', $openDate->getTimestamp())) . "</p>";
+                    echo "<p>Will close on: " . htmlspecialchars(strftime('%d, %B %Y, %I:%M %p', $closingDate->getTimestamp())) . "</p>";
+                    echo "<p>Time Limit: " . htmlspecialchars($row["time_Limit"]) . "</p>";
                     echo "<hr/>";
                     echo "<p>Allowed Attempts: " . htmlspecialchars($row["allowed_Attempts"]) . "</p>";
                     echo "<p>Assessment Type: " . htmlspecialchars($row["assessment_Type"]) . "</p>";
                     echo "<p>No. of Items: " . htmlspecialchars($row["no_Of_Items"]) . "</p>";
                     echo "<hr/>";
+                    echo "<h3>Instructions</h3>";
+                    echo "<p>". htmlspecialchars($row["assessment_Desc"]) . "</p>";
                     echo "</div>";
 
                     //Assign date values to check whether the assessment is open or not
@@ -113,15 +120,21 @@
                     //To show attempts data
                     echo "<p>Grades:</p>";
                     while ($exam_row = $user_exam_result->fetch_assoc()) {
-                        echo "<p>Attempt " . htmlspecialchars($exam_row["attempt_number"]) . ": " . htmlspecialchars($exam_row["score"]) . " (Date: " . htmlspecialchars($exam_row["date"]) . ")</p>";
+                        $attemptDate = new DateTime($exam_row["date"]);
+                        echo "<p>Attempt " . htmlspecialchars($exam_row["attempt_number"]) . ": " . htmlspecialchars($exam_row["score"]) ."</p>";
+                        echo "<p>Finished on: " . htmlspecialchars(strftime('%d, %B %Y', $attemptDate->getTimestamp())) . "</p>";
                     }
                     //Check if allowed attempts was all used up
                     if ($attempt_count >= $allowed_attempts) {
-                        echo "<p>No more attempts...</p>";
-                    //If there is still available attempts
-                    } else if($current_date>=$open_date){
-                        echo '<button onclick="window.location.href=\'../pages/assessment_form.html?attempt_number='. htmlspecialchars(($attempt_count + 1), ENT_QUOTES) .'&assessmentID=' . $assessment_ID . '\'">Reattempt</button>';
+                        echo "<p>No more attempts are allowed.</p>";
+                    //If closed na yung assessment ket may remaining attempts ka pa
+                    } else if($current_date<=$open_date &&$current_date>=$closing_date){
+                        echo "<p class='notif'>The assessment is now closed. Contact your professor to open/reopen the exam.</p>";
+                    }
+                    //If open pa yung assessment and may remaining attempts ka pa
+                    else if($current_date>=$open_date && $current_date<$closing_date){
                         echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
+                        echo '<button onclick="window.location.href=\'../AssessmentForm/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
                     }
                     else{
                         echo "<p>The assessment is not opened yet.</p>";
@@ -153,7 +166,7 @@
         }
 
         $conn->close();
-        echo '<button id="back" onclick="window.location.href=\'../index.php\'">Back</button>';
+        echo '<button id="back" onclick="window.location.href=\'../landing_page.php\'">Back</button>';
         ?>
     </div>
 </body>
