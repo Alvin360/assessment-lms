@@ -5,8 +5,8 @@
 
 
     $assessmentID = $_POST['assessmentID'];
-    // $userID = $_POST['userID'];
-    $userID = '202110755MN0';
+    $userID = $_SESSION["user_ID"];
+
 
     //$assessmentID = 'A66929e7ea';
     //$userID = 'U1234567890';
