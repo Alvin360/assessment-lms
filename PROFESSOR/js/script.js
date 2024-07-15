@@ -34,165 +34,125 @@ function fetchAssessments(course_ID = 'all') {
 
 
 function populateAssessments(assessments) {
-  const assessmentsContainer = document.getElementById('container_section_assessment');
-  assessmentsContainer.innerHTML = '';
+    const assessmentsContainer = document.getElementById('container_section_assessment');
+    assessmentsContainer.innerHTML = '';
 
-  // Group assessments by subject code and name
-  const groupedAssessments = assessments.reduce((acc, assessment) => {
-      const subjectKey = `${assessment.subject_Code}: ${assessment.subject_name}`;
-      if (!acc[subjectKey]) {
-          acc[subjectKey] = [];
-      }
-      acc[subjectKey].push(assessment);
-      return acc;
-  }, {});
+    // Group assessments by subject code and name
+    const groupedAssessments = assessments.reduce((acc, assessment) => {
+        const subjectKey = `${assessment.subject_Code}: ${assessment.subject_name}`;
+        if (!acc[subjectKey]) {
+            acc[subjectKey] = [];
+        }
+        acc[subjectKey].push(assessment);
+        return acc;
+    }, {});
 
-  // Create sections for each subject code and name
-  Object.keys(groupedAssessments).forEach(subjectCode => {
-      const subjectSection = document.createElement('div');
-      subjectSection.className = 'subject_section';
-      subjectSection.innerHTML = `
-          <h1 id='section1'>${subjectCode}</h1>
-          <div id="container_section_assessment_${subjectCode}">
-              <!-- Assessments for this subject will be populated here -->
-          </div>
-      `;
+    // Create sections for each subject code and name
+    Object.keys(groupedAssessments).forEach(subjectCode => {
+        const subjectSection = document.createElement('div');
+        subjectSection.className = 'subject_section';
+        subjectSection.innerHTML = `
+            <h1 id='section1'>${subjectCode}</h1>
+            <div id="container_section_assessment_${subjectCode}">
+                <!-- Assessments for this subject will be populated here -->
+            </div>
+        `;
 
-      assessmentsContainer.appendChild(subjectSection);
+        assessmentsContainer.appendChild(subjectSection);
 
-      const containerSectionAssessment = document.getElementById(`container_section_assessment_${subjectCode}`);
-      
-      groupedAssessments[subjectCode].forEach(assessment => {
-          const assessmentCard = document.createElement('div');
-          assessmentCard.className = 'card_topic';
-          assessmentCard.innerHTML = `
-              <div class="container_assessment">
-                  <div class="container_collapsed">
-                      <button class="button_collapse hidden">Collapse</button>
-                      <button class="button_expand">Expand</button>
-                      <h2>${assessment.assessment_name}</h2>
+        const containerSectionAssessment = document.getElementById(`container_section_assessment_${subjectCode}`);
+        
+        groupedAssessments[subjectCode].forEach(assessment => {
+            const assessmentCard = document.createElement('div');
+            assessmentCard.className = 'card_topic';
+            assessmentCard.innerHTML = `
+                <div class="container_assessment">
+                    <div class="container_collapsed">
+                        <button class="button_collapse hidden">Collapse</button>
+                        <button class="button_expand">Expand</button>
+                        <h2>${assessment.assessment_name}</h2>
 
-                      <div class="container_buttons">
-                          <button class="button_export" onclick="toggleDropdown('${assessment.assessment_ID}')" data-id="${assessment.assessment_id}">Export</button>
-                          <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
-                          <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
-                      </div>
-                  </div>
+                        <div class="container_buttons">
+                            <button class="button_export" data-id="${assessment.assessment_id}">Export</button>
+                            <button class="button_edit" data-id="${assessment.assessment_id}">Edit</button>
+                            <button class="button_report" data-id="${assessment.assessment_id}">Report</button>
+                        </div>
+                    </div>
 
-                  <div class="container_expanded hidden">
-                      <p>Opened: ${assessment.open_Date}</p>
-                      <p>Due: ${assessment.closing_Date}</p>
-                      <div class="container_student" assessmentID="${assessment.assessment_id}">
-                          <!-- Students will be populated here -->
-                      </div>
-                  </div>
-              </div>
-              <div id="dropdown-${assessment.assessment_id}" class="dropdown-content hidden">
-                  <div>
-                      <input type="checkbox" class="checkbox" id="include-answer-key-${assessment.assessment_id}">
-                      <label for="include-answer-key-${assessment.assessment_id}">Include Answer Key</label>
-                  </div>
-                  <div>
-                      <input type="checkbox" class="checkbox" id="include-answer-sheet-${assessment.assessment_id}">
-                      <label for="include-answer-sheet-${assessment.assessment_id}">Include Answer Sheet</label>
-                  </div>
-                  <div>
-                      <input type="checkbox" class="checkbox" id="shuffle-questions-${assessment.assessment_id}">
-                      <label for="shuffle-questions-${assessment.assessment_id}">Shuffle Questions</label>
-                  </div>
-                  <div>
-                      <button onclick="exportAssessment('${assessment.assessment_id}')">Export PDF</button>
-                  </div>
-              </div>
-          `;
+                    <div class="container_expanded hidden">
+                        <p>Opened: ${assessment.open_Date}</p>
+                        <p>Due: ${assessment.closing_Date}</p>
+                        <div class="container_student" assessmentID="${assessment.assessment_id}">
+                            <!-- Students will be populated here -->
+                        </div>
+                    </div>
 
-          containerSectionAssessment.appendChild(assessmentCard);
+                    <div id="dropdown-${assessment.assessment_id}" class="dropdown-content hidden">
+                        <div>
+                            <input type="checkbox" class="checkbox" id="include-answer-key-${assessment.assessment_id}">
+                            <label for="include-answer-key-${assessment.assessment_id}">Include Answer Key</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="checkbox" id="include-answer-sheet-${assessment.assessment_id}">
+                            <label for="include-answer-sheet-${assessment.assessment_id}">Include Answer Sheet</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="checkbox" id="shuffle-questions-${assessment.assessment_id}">
+                            <label for="shuffle-questions-${assessment.assessment_id}">Shuffle Questions</label>
+                        </div>
+                        <div>
+                            <button onclick="exportAssessment('${assessment.assessment_id}')">Export PDF</button>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-          const containerStudent = assessmentCard.querySelector('.container_student');
-          containerStudent.setAttribute('assessmentID', assessment.assessment_id);
+            containerSectionAssessment.appendChild(assessmentCard);
 
-          // Add event listeners for collapse and expand buttons
-          const buttonCollapse = assessmentCard.querySelector('.button_collapse');
-          const buttonExpand = assessmentCard.querySelector('.button_expand');
-          const containerExpanded = assessmentCard.querySelector('.container_expanded');
+            const containerStudent = assessmentCard.querySelector('.container_student');
+            containerStudent.setAttribute('assessmentID', assessment.assessment_id);
 
-          buttonCollapse.addEventListener('click', () => {
-              buttonCollapse.classList.add('hidden');
-              buttonExpand.classList.remove('hidden');
-              containerExpanded.classList.add('hidden');
-          });
+            // Add event listeners for collapse and expand buttons
+            const buttonCollapse = assessmentCard.querySelector('.button_collapse');
+            const buttonExpand = assessmentCard.querySelector('.button_expand');
+            const containerExpanded = assessmentCard.querySelector('.container_expanded');
 
-          buttonExpand.addEventListener('click', () => {
-              buttonExpand.classList.add('hidden');
-              buttonCollapse.classList.remove('hidden');
-              containerExpanded.classList.remove('hidden');
-          });
+            buttonCollapse.addEventListener('click', () => {
+                buttonCollapse.classList.add('hidden');
+                buttonExpand.classList.remove('hidden');
+                containerExpanded.classList.add('hidden');
+            });
 
-          // Add event listeners for export, edit, and report buttons
-          assessmentCard.querySelector('.button_export').addEventListener('click', (e) => {
-              e.stopPropagation();
-              toggleDropdown(assessment.assessment_id);
-          });
+            buttonExpand.addEventListener('click', () => {
+                buttonExpand.classList.add('hidden');
+                buttonCollapse.classList.remove('hidden');
+                containerExpanded.classList.remove('hidden');
+            });
 
-          assessmentCard.querySelector('.button_edit').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/includes/edit_assessment.php?id=${assessment.assessment_id}&subject_Code=${assessment.subject_Code}`;
-          });
+            // Add event listener for export button to toggle dropdown visibility
+            const buttonExport = assessmentCard.querySelector('.button_export');
+            buttonExport.addEventListener('click', () => {
+                const dropdown = document.getElementById(`dropdown-${buttonExport.dataset.id}`);
+                dropdown.classList.toggle('hidden');
+            });
 
-          assessmentCard.querySelector('.button_report').addEventListener('click', () => {
-              window.location.href = `../PROFESSOR/pages/student_report.html?assessmentID=${assessment.assessment_id}`;
-          });
+            
+            assessmentCard.querySelector('.button_export').addEventListener('click', () => {
+                window.location.href = `../PROFESSOR/includes/export_assessment.php?id=${assessment.assessment_id}&subject_Code=${assessment.subject_Code}`;
+            });
 
-          // Fetch and display students
-          fetchAndDisplayStudents(assessment.assessment_id, assessment.subject_Code);
-      });
-  });
-}
+            assessmentCard.querySelector('.button_edit').addEventListener('click', () => {
+                window.location.href = `../PROFESSOR/includes/edit_assessment.php?id=${assessment.assessment_id}&subject_Code=${assessment.subject_Code}`;
+            });
 
-function toggleDropdown(id) {
-  const dropdown = document.getElementById(`dropdown-${id}`);
-  const isHidden = dropdown.classList.contains('hidden');
-  document.querySelectorAll('.dropdown-content').forEach(dd => dd.classList.add('hidden')); // Hide other dropdowns
-  if (isHidden) {
-      dropdown.classList.remove('hidden');
-  } else {
-      dropdown.classList.add('hidden');
-  }
-}
+            assessmentCard.querySelector('.button_report').addEventListener('click', () => {
+                window.location.href = `../PROFESSOR/pages/student_report.html?assessmentID=${assessment.assessment_id}`;
+            });
 
-function exportAssessment(assessmentID) {
-  const includeAnswerKey = document.getElementById(`include-answer-key-${assessmentID}`).checked;
-  const includeAnswerSheet = document.getElementById(`include-answer-sheet-${assessmentID}`).checked;
-  const shuffleQuestions = document.getElementById(`shuffle-questions-${assessmentID}`).checked;
-
-  // Here you can implement the logic to export the assessment with the selected options
-  console.log(`Exporting assessment ${assessmentID} with options:`, {
-      includeAnswerKey,
-      includeAnswerSheet,
-      shuffleQuestions
-  });
-
-  // Example AJAX request to export the assessment
-  fetch(`../PROFESSOR/includes/export_assessment.php`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          assessmentID,
-          includeAnswerKey,
-          includeAnswerSheet,
-          shuffleQuestions
-      })
-  })
-  .then(response => response.json())
-  .then(data => {
-      // Handle the response
-      console.log('Export successful:', data);
-      // Optionally, you can redirect or show a success message
-  })
-  .catch(error => {
-      console.error('Error exporting assessment:', error);
-  });
+            // Fetch and display students
+            fetchAndDisplayStudents(assessment.assessment_id, assessment.subject_Code);
+        });
+    });
 }
 function fetchAndDisplayStudents(assessmentID, subjectCode) {
     fetch(`../PROFESSOR/includes/assessment_prof_model.php?assessment_ID='${assessmentID}'&subject_Code='${subjectCode}'`)

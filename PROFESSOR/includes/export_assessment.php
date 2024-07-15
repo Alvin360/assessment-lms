@@ -1,11 +1,9 @@
-<?php
+<<?php
 require('../includes/fpdf/fpdf.php');
 require_once '../includes/dbh_inc.php';
 
 if (isset($_GET['id'])) {
     $assessmentID = $_GET['id'];
-    $includeAnswerKey = isset($_GET['includeAnswerKey']) && $_GET['includeAnswerKey'] === 'true';
-    $includeAnswerSheet = isset($_GET['includeAnswerSheet']) && $_GET['includeAnswerSheet'] === 'true';
     $shuffleQuestions = isset($_GET['shuffleQuestions']) && $_GET['shuffleQuestions'] === 'true';
 
     // Fetch assessment from the database
@@ -266,13 +264,11 @@ if (isset($_GET['id'])) {
         $pdf->MatchingQuestions($matchingQuestions, $matchingAnswers);
     }
 
-    if ($includeAnswerSheet) {
-        $pdf->AnswerSheet('ans_sheet.png'); // Path to the answer sheet image
-    }
+    // Always generate answer sheet
+    $pdf->AnswerSheet('../assets/ans_sheet.png'); // Path to the answer sheet image
 
-    if ($includeAnswerKey) {
-        $pdf->AnswerKey($questions, $correctAnswersList, $matchingQuestions, $matchingAnswers);
-    }
+    // Always generate answer key
+    $pdf->AnswerKey($questions, $correctAnswersList, $matchingQuestions, $matchingAnswers);
 
     // Avoid any output before this point
     ob_clean();
