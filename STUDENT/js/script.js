@@ -28,11 +28,12 @@ function populateAssessments(assessments) {
             assessments[subject].forEach(assessment => {
                 const assessmentCard = document.createElement('div');
                 assessmentCard.className = 'card_topic';
+                const buttonClass = getButtonClass(assessment.status);
                 assessmentCard.innerHTML = `
                     <div class="container_assessment_student">
                         <div class="flex_row">
                             <h3>${assessment.assessment_name}</h3>
-                            <button class="assessment-button">${assessment.attempted ? 'Review' : 'Start'}</button>
+                            <button class="assessment-button ${buttonClass}">${assessment.status}</button>
                         </div>
                         <p>Opened: ${assessment.open_Date}</p>
                         <p>Due: ${assessment.closing_Date}</p>
@@ -40,7 +41,6 @@ function populateAssessments(assessments) {
                 `;
                 const button = assessmentCard.querySelector('.assessment-button');
                 button.addEventListener('click', () => {
-                    const pageUrl = assessment.attempted ? 'review_page_placeholder' : 'start_page_placeholder';
                     window.location.href = `../STUDENT/includes/assessment-viewinfo.php?assessment_ID=${assessment.assessment_id}&subject_Code=${assessment.subject_Code}`;
                 });
                 assessmentsContainer.appendChild(assessmentCard);
@@ -49,5 +49,17 @@ function populateAssessments(assessments) {
     }
 }
 
-
-
+function getButtonClass(status) {
+    switch (status) {
+        case 'Start':
+            return 'start-status';
+        case 'Reattempt':
+            return 'reattempt-status';
+        case 'View Details':
+            return 'view-details-status';
+        case 'Missed':
+            return 'missed-status';
+        default:
+            return '';
+    }
+}
