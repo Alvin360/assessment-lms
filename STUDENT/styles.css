@@ -345,3 +345,21 @@ header {
     font-size: 16px;
     border-radius: 5px;
 }
+
+#container_session{
+    display: flex;
+    flex-direction: column;
+}
+
+#submit_session {
+    background-color: #990000;
+    width: 20%;
+    color: #FFF;
+    border-radius: 10px;
+    padding: 1%;
+    margin-top: 2%;
+}
+
+#student-id {
+    width: 50%;
+}

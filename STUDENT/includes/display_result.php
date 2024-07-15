@@ -29,7 +29,7 @@
         <p id="score"></p>
         <p id="grade"></p>
         <div class="button-container">
-            <a href="../index.php" class="button">Go to Assessment Page</a>
+            <a href="../landing_page.php" class="button">Go to Assessment Page</a>
             <a href="assessment-viewinfo.php" class="button">Go to Assessment Info</a>
         </div>
     </div>
