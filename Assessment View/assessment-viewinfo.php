@@ -134,8 +134,8 @@
                         }
                         //If open pa yung assessment and may remaining attempts ka pa
                         else if($current_date>=$open_date && $current_date<$closing_date){
-                            echo '<button onclick="window.location.href=\'../AssessmentForm/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
                             echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
+                            echo '<button onclick="window.location.href=\'../AssessmentForm/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
                         }
                         else{
                             echo "<p>The assessment is not opened yet.</p>";
