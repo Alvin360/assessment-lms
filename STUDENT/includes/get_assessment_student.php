@@ -31,7 +31,7 @@
     $subject_Codes_in = implode("','", $subject_Codes);
 
     // Get assessment details
-    $query_assessments = "SELECT assessment_ID, subject_Code, assessment_name, open_Date, closing_Date, allowed_Attempts FROM assessment WHERE subject_Code IN ('$subject_Codes_in')";
+    $query_assessments = "SELECT assessment_ID, subject_Code, assessment_name, open_Date, closing_Date, allowed_Attempts FROM assessment WHERE subject_Code IN ('$subject_Codes_in')  AND is_Archived='0'";
     $result_assessments = executeQuery($conn, $query_assessments);
 
     $query_attempted = "SELECT assessment_ID, COUNT(*) AS attempts FROM user_exam_report WHERE user_ID = '$user_ID' GROUP BY assessment_ID";

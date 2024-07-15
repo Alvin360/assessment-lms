@@ -193,6 +193,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         <div id="new-questions-container"></div>
         <button type="button" onclick="addQuestion()">Add New Question</button>
         <button type="submit">Save</button>
+        <button type="button" onclick="confirmArchive()">Archive</button>
     </form>
 
     <script>
@@ -333,8 +334,14 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
             dateFormat: "Y-m-d h:i K",
             time_24hr: false
         });
-</script>
+
+        function confirmArchive() {
+            if (confirm("Are you sure you want to archive this assessment?")) {
+                window.location.href = "archive_assessment.php?assessment_ID=<?php echo $assessmentID; ?>";
+            }
+        }
     </script>
+
 </body>
 </html>
 

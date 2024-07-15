@@ -124,8 +124,6 @@
 
 
             <div id="container_assessments_subject">
-                <h1 id='section1'></h1>
-
                 <div id="container_section_assessment">
                     <!-- Assessments will be populated here -->
                 </div>

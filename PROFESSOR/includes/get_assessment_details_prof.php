@@ -31,7 +31,7 @@ if (count($subject_Codes) > 0) {
 
 $query_assessment = "SELECT assessment_id, subject_Code, assessment_name, open_Date, closing_Date 
                      FROM assessment 
-                     WHERE subject_Code IN ($subject_Codes_str)";
+                     WHERE subject_Code IN ($subject_Codes_str) AND is_Archived='0'";
 $result = executeQuery($conn, $query_assessment);
 
 $assessments = array();
