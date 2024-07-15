@@ -49,16 +49,9 @@
         
         if (isset($_SESSION["user_ID"])) {
             $user_ID = $_SESSION["user_ID"];
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "pup_lms";
+            //Include database
+            require_once './includes/db.php';
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
 
             if (isset($_GET['assessment_ID']) && isset($_GET['subject_Code'])) {
                 $assessment_ID = $_GET['assessment_ID'];
@@ -141,12 +134,13 @@
                         }
                         //If open pa yung assessment and may remaining attempts ka pa
                         else if($current_date>=$open_date && $current_date<$closing_date){
-                            echo "<button>Reattempt</button>";
+                            echo '<button onclick="window.location.href=\'../AssessmentForm/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
                             echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
                         }
                         else{
                             echo "<p>The assessment is not opened yet.</p>";
                         }
+
                     //When there is no attempt yet
                     } else {
                         //Check if the assessment is still open
