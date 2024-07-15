@@ -4,7 +4,7 @@ require_once '../includes/dbh_inc.php';
 
 // Function to update assessment
 function updateAssessment($conn, $data) {
-    $sql = "UPDATE assessment SET assessment_Name = ?, creator_ID = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, assessment_Desc = ?, allowed_Attempts = ?";
+    $sql = "UPDATE assessment SET assessment_Name = ?, creator_ID = ?, assessment_Type = ?, time_Limit = ?, no_Of_Items = ?, assessment_Desc = ?, allowed_Attempts = ?, subject_Code = ?";
     $params = [
         $data['assessmentName'], 
         $data['creatorID'], 
@@ -12,9 +12,10 @@ function updateAssessment($conn, $data) {
         $data['timeLimit'], 
         $data['noOfItems'], 
         $data['assessmentDesc'], 
-        $data['allowedAttempts']
+        $data['allowedAttempts'],
+        $data['subjectCode']
     ];
-    $types = 'sssssss';
+    $types = 'ssssssss';
 
     if (!empty($data['open_Date'])) {
         $sql .= ", open_Date = ?";
@@ -40,13 +41,17 @@ function updateAssessment($conn, $data) {
 // Function to update questions
 function updateQuestions($conn, $questions, $assessmentID) {
     foreach ($questions as $questionID => $questionData) {
-        $sql = "UPDATE examination_bank SET question = ?, question_Type = ?, points = ? WHERE assessment_ID = ? AND question_ID = ?";
+        $sql = "UPDATE examination_bank SET question = ?, question_Type = ?, points = ?, choice1 = ?, choice2 = ?, choice3 = ?, choice4 = ? WHERE assessment_ID = ? AND question_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param(
-            'ssisi', 
+            'ssisssssi', 
             $questionData['text'], 
             $questionData['type'], 
             $questionData['points'], 
+            $questionData['options'][0],
+            $questionData['options'][1],
+            $questionData['options'][2],
+            $questionData['options'][3],
             $assessmentID, 
             $questionID
         );
@@ -93,6 +98,17 @@ function updateAnswers($conn, $questionID, $questionData) {
     return $stmt->execute();
 }
 
+// Function to generate a unique question_ID
+function generateUniqueQuestionID($conn, $assessmentID) {
+    $sql = "SELECT MAX(question_ID) as maxQuestionID FROM examination_bank WHERE assessment_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $assessmentID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['maxQuestionID'] ? $row['maxQuestionID'] + 1 : 1; // Start from 1 if no questions exist
+}
+
 // Function to add new questions
 function addNewQuestions($conn, $newQuestions, $assessmentID) {
     $maxQuestionNoSql = "SELECT MAX(question_No) as maxQuestionNo FROM examination_bank WHERE assessment_ID = ?";
@@ -105,13 +121,25 @@ function addNewQuestions($conn, $newQuestions, $assessmentID) {
 
     foreach ($newQuestions as $newQuestion) {
         $questionNo++;
-        $sql = "INSERT INTO examination_bank (assessment_ID, question, question_Type, points, question_No) VALUES (?, ?, ?, ?, ?)";
+        $newQuestionID = generateUniqueQuestionID($conn, $assessmentID); 
+
+        $sql = "INSERT INTO examination_bank (assessment_ID, question_ID, question, question_Type, points, question_No, choice1, choice2, choice3, choice4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sssii', $assessmentID, $newQuestion['text'], $newQuestion['type'], $newQuestion['points'], $questionNo);
+        $stmt->bind_param('sissiiisss', 
+            $assessmentID, 
+            $newQuestionID, 
+            $newQuestion['text'], 
+            $newQuestion['type'], 
+            $newQuestion['points'], 
+            $questionNo, 
+            $newQuestion['options'][0], 
+            $newQuestion['options'][1], 
+            $newQuestion['options'][2], 
+            $newQuestion['options'][3]
+        );
         if (!$stmt->execute()) {
             return false;
         }
-        $newQuestionID = $stmt->insert_id;
         if (!addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID)) {
             return false;
         }
@@ -142,7 +170,8 @@ function addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID) {
             $sql = "INSERT INTO exam_answer (assessment_ID, question_ID, m_Ans1, m_Ans2, m_Ans3, m_Ans4, m_Ans5, m_Ans6, m_Ans7, m_Ans8, m_Ans9, m_Ans10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('isiiiiiiiiii', 
-                $assessmentID, $newQuestionID, 
+                $assessmentID, 
+                $newQuestionID, 
                 $newQuestion['m_Ans1'], $newQuestion['m_Ans2'], $newQuestion['m_Ans3'], $newQuestion['m_Ans4'], 
                 $newQuestion['m_Ans5'], $newQuestion['m_Ans6'], $newQuestion['m_Ans7'], $newQuestion['m_Ans8'], 
                 $newQuestion['m_Ans9'], $newQuestion['m_Ans10']
@@ -151,6 +180,7 @@ function addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID) {
     }
     return $stmt->execute();
 }
+
 
 // Start transaction
 $conn->begin_transaction();
@@ -172,7 +202,7 @@ try {
         'assessmentID' => $assessmentID,
         'assessmentName' => $_POST['assessmentName'],
         'creatorID' => $creatorID, // Replace with actual creator ID
-        'subject_Code' => $_POST['subject_Code'], 
+        'subjectCode' => $_POST['subjectCode'], 
         'assessmentType' => 'Q',
         'timeLimit' => $_POST['timeLimit'],
         'assessmentDesc' => $_POST['assessmentDesc'],

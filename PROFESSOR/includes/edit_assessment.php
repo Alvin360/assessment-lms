@@ -72,6 +72,10 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
             <input type="text" id="assessmentDesc" name="assessmentDesc" value="<?php echo isset($assessment['assessment_Desc']) ? htmlspecialchars($assessment['assessment_Desc']) : ''; ?>">
         </div>
         <div class="form-group">
+            <label for="subject_code">Subject Code:</label>
+            <input type="text" id="subjectCode" name="subjectCode" value="<?php echo isset($assessment['subject_Code']) ? htmlspecialchars($assessment['subject_Code']) : ''; ?>" required>
+        </div>
+        <div class="form-group">
             <label for="timeLimit">Time Limit (Hour / Minutes):</label>
             <input type="text" id="timeLimit" name="timeLimit" value="<?php echo isset($assessment['time_Limit']) ? htmlspecialchars($assessment['time_Limit']) : ''; ?>" required>
         </div>
