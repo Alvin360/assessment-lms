@@ -309,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
               const row = document.createElement('tr');
               row.innerHTML = `
                   <td>${report.user_ID}</td>
+                  <td>${report.student_name}</td>
                   <td>${report.attempt_Number}</td>
                   <td>${report.score}</td>
                   <td>${report.grade}</td>

@@ -122,8 +122,8 @@ button {
 }
 
 /* Student Report Page */
-.container {
-    max-width: 800px;
+#table-container {
+    width: 70vw;
     margin: 20px auto;
     background: #fff;
     padding: 20px;
