@@ -41,10 +41,10 @@ function updateAssessment($conn, $data) {
 // Function to update questions
 function updateQuestions($conn, $questions, $assessmentID) {
     foreach ($questions as $questionID => $questionData) {
-        $sql = "UPDATE examination_bank SET question = ?, question_Type = ?, points = ?, choice1 = ?, choice2 = ?, choice3 = ?, choice4 = ? WHERE assessment_ID = ? AND question_ID = ?";
+        $sql = "UPDATE examination_bank SET question = ?, question_Type = ?, points = ?, choice1 = ?, choice2 = ?, choice3 = ?, choice4 = ?, long_Answer = ? WHERE assessment_ID = ? AND question_ID = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param(
-            'ssisssssi', 
+            'ssissssssi', 
             $questionData['text'], 
             $questionData['type'], 
             $questionData['points'], 
@@ -52,6 +52,7 @@ function updateQuestions($conn, $questions, $assessmentID) {
             $questionData['options'][1],
             $questionData['options'][2],
             $questionData['options'][3],
+            $questionData['correctAnswer'],  // Use this for long_answer column
             $assessmentID, 
             $questionID
         );
@@ -69,6 +70,7 @@ function updateQuestions($conn, $questions, $assessmentID) {
 // Function to update answers
 function updateAnswers($conn, $questionID, $questionData) {
     $sql = "";
+    $stmt = null;
     switch ($questionData['type']) {
         case 'M': // Multiple Choice
             $sql = "UPDATE exam_answer SET answer = ? WHERE question_ID = ?";
@@ -94,8 +96,13 @@ function updateAnswers($conn, $questionID, $questionData) {
                 $questionData['m_Ans9'], $questionData['m_Ans10'], $questionID
             );
             break;
+        case 'E': // Long Answer
+            $sql = "UPDATE exam_answer SET long_Answer = ? WHERE question_ID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('si', $questionData['correctAnswer'], $questionID);
+            break;
     }
-    return $stmt->execute();
+    return $stmt && $stmt->execute();
 }
 
 // Function to generate a unique question_ID
@@ -123,9 +130,9 @@ function addNewQuestions($conn, $newQuestions, $assessmentID) {
         $questionNo++;
         $newQuestionID = generateUniqueQuestionID($conn, $assessmentID); 
 
-        $sql = "INSERT INTO examination_bank (assessment_ID, question_ID, question, question_Type, points, question_No, choice1, choice2, choice3, choice4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO examination_bank (assessment_ID, question_ID, question, question_Type, points, question_No, choice1, choice2, choice3, choice4, long_Answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sissiiisss', 
+        $stmt->bind_param('sissiiissss', 
             $assessmentID, 
             $newQuestionID, 
             $newQuestion['text'], 
@@ -135,7 +142,8 @@ function addNewQuestions($conn, $newQuestions, $assessmentID) {
             $newQuestion['options'][0], 
             $newQuestion['options'][1], 
             $newQuestion['options'][2], 
-            $newQuestion['options'][3]
+            $newQuestion['options'][3],
+            $newQuestion['correctAnswer'] // Use this for long_answer column
         );
         if (!$stmt->execute()) {
             return false;
@@ -150,6 +158,7 @@ function addNewQuestions($conn, $newQuestions, $assessmentID) {
 // Function to add new answers
 function addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID) {
     $sql = "";
+    $stmt = null;
     switch ($newQuestion['type']) {
         case 'M': // Multiple Choice
             $sql = "INSERT INTO exam_answer (assessment_ID, question_ID, answer) VALUES (?, ?, ?)";
@@ -177,8 +186,13 @@ function addNewAnswers($conn, $newQuestionID, $newQuestion, $assessmentID) {
                 $newQuestion['m_Ans9'], $newQuestion['m_Ans10']
             );
             break;
+        case 'E': // Long Answer
+            $sql = "INSERT INTO exam_answer (assessment_ID, question_ID, long_Answer) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('sis', $assessmentID, $newQuestionID, $newQuestion['correctAnswer']);
+            break;
     }
-    return $stmt->execute();
+    return $stmt && $stmt->execute();
 }
 
 

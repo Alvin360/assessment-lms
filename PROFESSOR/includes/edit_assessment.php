@@ -30,6 +30,9 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
         case 'F':
             $sql = "SELECT m_Ans1, m_Ans2, m_Ans3, m_Ans4, m_Ans5, m_Ans6, m_Ans7, m_Ans8, m_Ans9, m_Ans10 FROM exam_answer WHERE question_ID = ?";
             break;
+        case 'E':
+            $sql = "SELECT long_Answer FROM exam_answer WHERE question_ID = ?";
+            break;
         default:
             return ''; // Handle unknown question types
     }
@@ -135,6 +138,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                         <option value="T" <?php echo $question['question_Type'] === 'T' ? 'selected' : ''; ?>>True or False</option>
                         <option value="S" <?php echo $question['question_Type'] === 'S' ? 'selected' : ''; ?>>Short Answer</option>
                         <option value="F" <?php echo $question['question_Type'] === 'F' ? 'selected' : ''; ?>>Match</option>
+                        <option value="E" <?php echo $question['question_Type'] === 'E' ? 'selected' : ''; ?>>Long Answer</option>
                     </select>
 
                     <label for="points-<?php echo $question['question_ID']; ?>">Points:</label>
@@ -178,6 +182,9 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                                 <input type="text" id="m-ans<?php echo $i; ?>-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][correctAnswer][<?php echo $i - 1; ?>]" value="<?php echo htmlspecialchars($correctAnswers['m_Ans'.$i]); ?>" required>
                                 <br>
                             <?php endfor; ?>
+                        <?php elseif ($question['question_Type'] === 'E'): ?>
+                            <label for="long-answer-<?php echo $question['question_ID']; ?>">Correct Answer:</label>
+                            <textarea id="long-answer-<?php echo $question['question_ID']; ?>" name="questions[<?php echo $question['question_ID']; ?>][correctAnswer]" required><?php echo htmlspecialchars($correctAnswers['long_Answer']); ?></textarea>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -209,6 +216,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                     '<option value="T">True or False</option>' +
                     '<option value="S">Short Answer (Fill-in-the-Blank)</option>' +
                     '<option value="F">Match</option>' +
+                    '<option value="E">Long Answer</option>' +
                 '</select>' +
 
                 '<label for="new-question-points-' + questionCount + '">Points:</label>' +
@@ -240,8 +248,7 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                         '<option value="1">Option 1</option>' +
                         '<option value="2">Option 2</option>' +
                         '<option value="3">Option 3</option>' +
-                        '<option value="4">Option 4</option>' +
-                    '</select>';
+                        '<option value="4">Option 4</option>';
             } else if (selectedType === 'T') {
                 optionsContainer.innerHTML = 
                     '<label for="boolean-' + count + '">Correct Answer (True/False):</label>' +
@@ -260,6 +267,10 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                         '<label for="m-ans' + i + '-' + count + '">Correct Answer ' + i + ':</label>' +
                         '<input type="text" id="m-ans' + i + '-' + count + '" name="newQuestions[' + count + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
+            } else if (selectedType === 'E') {
+                optionsContainer.innerHTML = 
+                    '<label for="long-answer-' + count + '">Correct Answer:</label>' +
+                    '<textarea id="long-answer-' + count + '" name="newQuestions[' + count + '][correctAnswer]" required></textarea>';
             }
         }
 
@@ -303,6 +314,10 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
                         '<label for="m-ans' + i + '-' + questionID + '">Correct Answer ' + i + ':</label>' +
                         '<input type="text" id="m-ans' + i + '-' + questionID + '" name="questions[' + questionID + '][correctAnswer][' + (i - 1) + ']" ' + (i <= 4 ? 'required' : '') + '>';
                 }
+            } else if (selectedType === 'E') {
+                optionsContainer.innerHTML = 
+                    '<label for="long-answer-' + questionID + '">Correct Answer:</label>' +
+                    '<textarea id="long-answer-' + questionID + '" name="questions[' + questionID + '][correctAnswer]" required></textarea>';
             }
         }
 
@@ -322,4 +337,5 @@ function fetchCorrectAnswers($questionID, $questionType, $conn) {
     </script>
 </body>
 </html>
+
 
