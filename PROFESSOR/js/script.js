@@ -1,16 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('../PROFESSOR/includes/get_assessment_details_prof.php')
-      .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-      })
+  // Fetch and populate course filter options
+  fetch('../PROFESSOR/includes/get_courses.php')
+      .then(response => response.json())
+      .then(courses => {
+          const courseFilter = document.getElementById('course-filter');
+          courses.forEach(course => {
+              const option = document.createElement('option');
+              option.value = course.course_ID;
+              option.textContent = course.course_ID;
+              option.text = course.course_ID;
+              courseFilter.appendChild(option);
+          });
+      });
+
+  // Fetch and populate assessments initially
+  fetchAssessments();
+
+  // Add event listener to course filter
+  document.getElementById('course-filter').addEventListener('change', (event) => {
+      const selectedCourse = event.target.value;
+      fetchAssessments(selectedCourse);
+  });
+});
+
+function fetchAssessments(course_ID = 'all') {
+  fetch(`../PROFESSOR/includes/get_assessment_details_prof.php?course_ID=${course_ID}`)
+      .then(response => response.json())
       .then(assessments => {
           populateAssessments(assessments);
       })
       .catch(error => console.error('Error:', error));
-});
+}
 
 function populateAssessments(assessments) {
   const assessmentsContainer = document.getElementById('container_section_assessment');
