@@ -6,19 +6,20 @@
     <title>Assessment Result</title>
     <link rel="stylesheet" href="../styles.css">
     <script>
-        // Prevent back navigation
+        // Prevent back navigation and redirect to assessment_viewinfo.php
         window.onload = function() {
             if (typeof history.pushState === "function") {
                 history.pushState(null, null, document.URL);
                 window.addEventListener('popstate', function () {
                     history.pushState(null, null, document.URL);
+                    window.location.href = 'assessment_viewinfo.php'; // Adjust the path to your file
                 });
             }
         };
 
         // Optionally, you can show an alert when trying to go back
         window.addEventListener('popstate', function(event) {
-            alert("Invalid action. Please proceed to the Student Landing Page.");
+            alert("You are being redirected to the assessment view information page.");
         });
     </script>
 </head>
@@ -28,8 +29,8 @@
         <p id="score"></p>
         <p id="grade"></p>
         <div class="button-container">
-            <a href="../index.php" class="button">Go to Student Landing Page</a>
-            <a href="student_report_page.php" class="button">Proceed to Student Report Page</a>
+            <a href="../landing_page.php" class="button">Go to Assessment Page</a>
+            <a href="assessment-viewinfo.php" class="button">Go to Assessment Info</a>
         </div>
     </div>
     <script>

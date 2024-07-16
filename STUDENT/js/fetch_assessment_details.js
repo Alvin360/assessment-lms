@@ -66,6 +66,9 @@ async function fetchAssessmentDetails() {
                 `;
             });
             questionHTML += '</table>';
+        } else if (question.question_Type === 'E') {
+            // Short answer question
+            questionHTML += `<input type="text" name="question-${question.question_ID}" required>`;
         }
 
         questionDiv.innerHTML = questionHTML;

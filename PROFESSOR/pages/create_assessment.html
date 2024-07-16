@@ -14,7 +14,7 @@
     <header>
         <div class="top-bar">
             <div class="logo">
-                <img src="logo.png" alt="PUP">
+                <img src="../assets/logo.png" alt="PUP">
             </div>
             <nav class="main-nav">
                 <ul>
@@ -103,6 +103,7 @@
                     <option value="T">True or False</option>
                     <option value="S">Short Answer (Fill-in-the-Blank)</option>
                     <option value="F">Match</option>
+                    <option value="E">Long Answer</option>
                 </select>
 
                 <div id="options-${questionCount}" class="options-container"></div>
@@ -157,11 +158,15 @@
                         <input type="text" id="match${i}-${count}" name="questions[${count}][match][${i - 1}]" ${i <= 4 ? 'required' : ''}>
                         
                         <label for="m-ans${i}-${count}">Match Correct Answer ${i}:</label>
-                        <select id="m-ans${i}-${count}" name="questions[${count}][m_Ans${i}]" ${i <= 4 ? 'required' : ''}>
-                            ${Array.from({ length: 10 }, (_, index) => `<option value="${index + 1}">Match ${index + 1}</option>`).join('')}
-                        </select>
+                        <input type ='text' id="m-ans${i}-${count}" name="questions[${count}][m_Ans${i}]" ${i <= 4 ? 'required' : ''}>
+
                     `;
                 }
+            } else if (selectedType === 'E') {
+                optionsContainer.innerHTML = `
+                <label for="long-answer-${count}">Long Answer:</label>
+                <textarea id="long-answer-${count}" name="questions[${count}][longAnswer]" required></textarea>
+                `;
             }
         }
 

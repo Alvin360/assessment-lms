@@ -1,74 +1,21 @@
-<?php
-    require_once '../STUDENT/includes/config_session_inc.php';
-
-    // check if user's role is student
-
-    // if (!isset($_SESSION["user_ID"]) || $_SESSION["role"] !== '5') {
-    //     header("Location: ../STUDENT/index.php")
-    //     die();
-    // }
-    
-    require_once '../STUDENT/includes/dbh_inc.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assessment</title>
+    <title>Session Start</title>
     <link href="../STUDENT/styles.css" rel="stylesheet">
 </head>
-
 <body>
-<!-- Header section containing the navigation bars -->
-<header>
-        <div class="top-bar">
-            <div class="logo">
-                <img src="logo.png" alt="PUP">
+    <div  class='container'>
+        <h1>Assessment (Student)</h1>
+        <form action="../STUDENT/includes/verify_student.php" method="post">
+            <div id='container_session'>
+                <label for="student-id">Student ID:</label>
+                <input name="student-id" id="student-id" type="text" required>
+                <input type="submit" value="Submit" id="submit_session"/>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">My courses</a></li>
-                    <li><a href="../STUDENT/index.php">Assessment</a></li>
-                </ul>
-            </nav>
-            <nav class="profile-nav">
-                <ul>
-                    <li><a href="#">Notification</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="#">Profile</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="bottom-bar">
-            <ul>
-                <li><a href="#">Course</a></li>
-                <li><a href="#">Participants</a></li>
-                <li><a href="#">Grades</a></li>
-                <li><a href="#">Competencies</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <div id="landing_page">
-        <div id="nav_subjects">
-            
-        </div>
-        
-        <div id="container_assessments_students">
-            <h2 id='subject-heading'></h2>
-            
-            <div id="container_assessment_subject">
-                <div class="card_assessment">
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-    
-    
-    <script src="../STUDENT/js/script.js"></script>
 </body>
 </html>

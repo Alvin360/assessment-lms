@@ -5,8 +5,8 @@
 
 
     $assessmentID = $_POST['assessmentID'];
-    // $userID = $_POST['userID'];
-    $userID = '202110755MN0';
+    $userID = $_SESSION["user_ID"];
+
 
     //$assessmentID = 'A66929e7ea';
     //$userID = 'U1234567890';
@@ -30,7 +30,9 @@
         $questionType = $questionData['question_Type'];
         $points = $questionData['points'];
 
-        $totalPoints += $points;
+        if ($questionType != 'E') {
+            $totalPoints += $points;
+        }
 
         switch ($questionType) {
             case 'M': // Multiple Choice
@@ -114,6 +116,9 @@
                     }
                 }
                 break;
+                case 'E': // Essay
+                    // Do nothing for essay type questions
+                    break;
         }
     }
 
