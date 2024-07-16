@@ -48,6 +48,7 @@
     <!-- section containing the assessment page -->
     <div class="assessment-section">
         <?php
+        date_default_timezone_set('Asia/Manila');
         if (isset($_GET['assessment_ID']) && isset($_GET['subject_Code'])) {
             $assessment_ID = $_GET['assessment_ID'];
             $subject_Code = $_GET['subject_Code'];
@@ -134,7 +135,7 @@
                     //If open pa yung assessment and may remaining attempts ka pa
                     else if($current_date>=$open_date && $current_date<$closing_date){
                         echo "<p>You have " . ($allowed_attempts - $attempt_count) . " attempt(s) remaining.</p>";
-                        echo '<button onclick="window.location.href=\'../AssessmentForm/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
+                        echo '<button onclick="window.location.href=\'../pages/assessment_form.html?attempt_number=' . ($attempt_count + 1) . '\'">Reattempt</button>';
                     }
                     else{
                         echo "<p>The assessment is not opened yet.</p>";
