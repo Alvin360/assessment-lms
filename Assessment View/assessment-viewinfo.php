@@ -6,6 +6,7 @@
     <title>Assessment View</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Header section containing the navigation bars -->
     <header>
@@ -169,8 +170,8 @@
         } else {
             echo "User ID not set in session.";
         }
-        echo '<button id="back" onclick="window.location.href=\'session.php\'">Back</button>';
-        //echo '<button id="back" onclick="window.location.href=\'../LandingPage_Student/index.php\'">Back</button>';
+        //echo '<button id="back" onclick="window.location.href=\'session.php\'">Back</button>';
+        echo '<button id="back" onclick="window.location.href=\'../LandingPage_Student/index.php\'">Back</button>';
         ?>
     </div>
 </body>
