@@ -15,11 +15,12 @@ $timeLimit = $_POST['time_limit'] ?? '';
 $noOfItems = is_array($questions) ? count($questions) : 0;
 $assessmentID = uniqid('A');
 $date = date('Y-m-d H:i:s');
+$is_Archived = '0';
 
-$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO ASSESSMENT (assessment_ID, assessment_Name,  date_Created, open_date, creator_ID, subject_Code, assessment_Type, time_Limit, no_Of_Items, closing_date, assessment_Desc, allowed_Attempts, is_Archived) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('sssssssssssi', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts);
+$stmt->bind_param('sssssssssssii', $assessmentID, $assessmentName, $date, $openDate, $creatorID, $subjectCode, $assessmentType, $timeLimit, $noOfItems, $closingDate, $assessmentDesc, $allowedAttempts, $is_Archived);
 
 if ($stmt->execute()) {
     $insertQuestionSql = "INSERT INTO EXAMINATION_BANK (assessment_ID, question_ID, question_No, question, points, question_Type, choice1, choice2, choice3, choice4, boolean, fill_Blank, match1, match2, match3, match4, match5, match6, match7, match8, match9, match10, long_Answer) 
@@ -59,7 +60,7 @@ if ($stmt->execute()) {
             $match10 = isset($question['match'][9]) ? $question['match'][9] : null;
 
             // Long Answer
-            $longAnswer = isset($question['longAnswer']) ? $question['longAnswer'] : null;
+            $longAnswer = isset($question['longAnswer']) ? $question['longAnswer'] : ''; 
 
             $stmtInsertQuestion->bind_param('siissssssssssssssssssss', $assessmentID, $questionID, $questionNo, $questionText, $points, $questionType, $choice1, $choice2, $choice3, $choice4, $boolean, $fillBlank, $match1, $match2, $match3, $match4, $match5, $match6, $match7, $match8, $match9, $match10, $longAnswer);
 
