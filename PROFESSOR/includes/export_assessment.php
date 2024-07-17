@@ -79,7 +79,7 @@ if (isset($_GET['id'])) {
         function Header()
         {
             // Logo
-            $this->Image('../assets/logo.png',10,6,30); // Adjust the path and size of the logo as needed
+            $this->Image('../assets/logo-2.png',10,6,30); // Adjust the path and size of the logo as needed
             $this->SetFont('Arial','B',12);
             $this->Cell(0,5,'Republic of the Philippines',0,1,'C');
             $this->Cell(0,5,'Polytechnic University of the Philippines',0,1,'C');

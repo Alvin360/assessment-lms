@@ -53,6 +53,7 @@ function populateAssessments(assessments) {
         subjectSection.className = 'subject_section';
         subjectSection.innerHTML = `
             <h1 id='section1'>${subjectCode}</h1>
+            <div class="underline"></div>
             <div id="container_section_assessment_${subjectCode}">
                 <!-- Assessments for this subject will be populated here -->
             </div>
@@ -80,8 +81,8 @@ function populateAssessments(assessments) {
                     </div>
 
                     <div class="container_expanded hidden">
-                        <p>Opened: ${assessment.open_Date}</p>
-                        <p>Due: ${assessment.closing_Date}</p>
+                        <p class="p_nospace">Opened: ${assessment.open_Date}</p>
+                        <p class="p_nospace">Due: ${assessment.closing_Date}</p>
                         <div class="container_student" assessmentID="${assessment.assessment_id}">
                             <!-- Students will be populated here -->
                         </div>

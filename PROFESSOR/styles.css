@@ -223,6 +223,7 @@ header{
     padding-right: 15px;
     height: calc(100% - 130px);
     margin-top: 160px;
+    padding-bottom: 50px;
 }
 
 .p_nospace {
@@ -330,7 +331,7 @@ h1 {
 }
 
 table {
-    margin-top: 10%;
+    margin-top: 2%;
     width: 100%;
     border-collapse: collapse;
 }
@@ -345,17 +346,30 @@ table th {
     background-color: #f2f2f2;
 }
 
-#table-container {
-    width: 80vw;
-    max-width: 800px;
-    margin: 20px auto;
-    background: #fff;
-    padding: 20px;
-    border: 0.5px solid #dddddd;
+table > thead > tr > th {
+    padding: 2%;
+    overflow: none;
+    background-color: #700000;
+    color: #fff;
 }
 
-.container {
+table > tbody > tr:nth-child(even)  {
+    background-color: #b5b5b5;
+}
 
+#table-container {
+    overflow-x: scroll;
+    overflow: hidden;
+}
+
+thead {
+    overflow: hidden;
+}
+
+
+.underline{
+    width: 100%;
+    border: 0.5px solid #dddddd;
 }
 
 /* Navigation Bar */
@@ -863,6 +877,123 @@ body > header > div.top-bar > nav.main-nav > ul > li.more-nav-white > ul > li:nt
         flex-wrap: wrap;
     }
 }
+
+
+/*Create Assessment*/
+
+.content-body {
+    padding-left: 15px;
+    padding-right: 15px;
+    height: calc(100% - 130px);
+    margin-top: 160px;
+    padding-bottom: 100px;
+}
+
+.body-container {
+    margin: 0% 7.5%;
+    margin-top: 30px;
+}
+
+.content-block {
+    padding: 2%;
+    border-radius: 20px;
+    border: 0px solid black;
+    background-color: #FFFFFF;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.content-block > h1 {
+    padding-left: 30px;
+}
+
+.form-group {
+    padding: 10px 20px;
+    margin: 5px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#assessmentName, #assessment_desc, #subject_code, #assessment_type, #open_Date, #closing_Date, #time_limit, #allowed_attempts, .textbox, .dropdown, .textarea {
+    width: 100% !important;
+    padding: 8px !important;
+    margin: 0;
+    margin-bottom: 0 !important;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    background-color: #f5f5f5;
+}
+
+#assessment_desc, .textarea {
+    height: 100px;
+    resize: none;
+}
+
+.field-block {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0px 10px;
+}
+
+.half-block {
+    width: 50%;
+}
+
+.two-button-group {
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.button-bundle {
+    width: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.button-type-1 {
+    border-radius: 5px !important;
+    background-color: #990000 !important;
+    border: 0px !important;
+    color: #fff !important;
+    min-height: 40px !important;
+}
+
+@media (max-width: 700px){
+    .body-container {
+        margin: 0% 2.5%;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 425px){
+    .content-block > h1 {
+        padding-left: 15px;
+    }
+
+    .form-group {
+        padding: 10px 5px;
+        margin: 5px 0px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+}
+
 
 
 

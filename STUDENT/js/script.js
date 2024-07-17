@@ -147,6 +147,17 @@ async function fetchAssessmentDetails() {
         questionsContainer.appendChild(questionDiv);
     });
 
+
+    // Set up the timer if there is a time limit
+    if (data.time_Limit) {
+        console.log('Setting up timer with limit:', data.time_Limit);
+        setupTimer(data.time_Limit);
+    }
+
+    else {
+        console.log("data time limit not fetched");
+    }
+
     // Add hidden input fields for assessmentID and userID
     const hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
@@ -159,12 +170,6 @@ async function fetchAssessmentDetails() {
     userIDInput.name = 'userID';
     userIDInput.value = $userID; // Use the actual userID from the session
     document.getElementById('assessment-form').appendChild(userIDInput);
-
-    // Set up the timer if there is a time limit
-    if (data.time_Limit) {
-        console.log('Setting up timer with limit:', data.time_Limit);
-        setupTimer(data.time_Limit);
-    }
 }
 
 function setupTimer(timeLimit) {
@@ -191,7 +196,7 @@ function setupTimer(timeLimit) {
     }, 1000);
 }
 
-async function submitAssessment() {
+async function submitAssessment(assessmentID, subjectCode) {
     const formData = new FormData(document.getElementById('assessment-form'));
 
     const response = await fetch('../includes/submit_assessment.php', {
@@ -200,7 +205,7 @@ async function submitAssessment() {
     });
 
     const result = await response.json();
-    window.location.href = `../includes/display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}`;
+    window.location.href = `../includes/display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}&subjectCode=${subjectCode}&assessmentID=${assessmentID}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,7 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const confirmed = confirm('Are you sure you want to submit the assessment?');
         if (confirmed) {
-            submitAssessment();
+            const urlParams = new URLSearchParams(window.location.search);
+            const assessmentID = urlParams.get('assessmentID');
+            const subjectCode = urlParams.get('subjectCode');
+            submitAssessment(assessmentID, subjectCode);
         }
     });
 });

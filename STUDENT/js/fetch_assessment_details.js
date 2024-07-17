@@ -128,7 +128,7 @@ async function submitAssessment() {
     });
 
     const result = await response.json();
-    window.location.href = `../includes/display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}`;
+    window.location.href = `../includes/display_result.php?score=${result.score}&grade=${result.grade}&totalPoints=${result.totalPoints}&subjectCode=${data.subject_Code}&assessmentID=${assessmentID}`;
 }
 
 

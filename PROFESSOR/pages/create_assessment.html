@@ -11,8 +11,31 @@
 </head>
 <body>
     <!-- Header section containing the navigation bars -->
+    <div id="drawer">
+        <div class="close-button">
+            <img src="../assets/close.png"/>
+            <div>
+                <span>PUP eMabini</span>
+            </div>
+        </div>
+        <div>
+            <a>Home</a>
+        </div>
+        <div>
+            <a>Dashboard</a>
+        </div>
+        <div>
+            <a>My Courses</a>
+        </div>
+        <div>
+            <a style="text-decoration: none; color: black;" href="../index.php">Assessment</a>
+        </div>
+    </div>
     <header>
         <div class="top-bar">
+            <div class="toggle-hamburger">
+                <img src="../assets/hamburger.png" alt="PUP">
+            </div>
             <div class="logo">
                 <img src="../assets/logo.png" alt="PUP">
             </div>
@@ -20,66 +43,121 @@
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">My courses</a></li>
-                    <li><a href="../index.php">Assessment</a></li>
+                    <li class="toggle-nav"><a href="#">My courses</a></li>
+                    <li class="toggle-nav"><a href="../index.php">Assessment</a></li>
+                    <li class="more-nav-white">
+                        <a id="more-white" class="more">More</a>
+                        <ul class="dropdown-menu-white">
+                            <li><a href="#">My Courses</a></li>
+                            <li><a href="../index.php">Assessment</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <nav class="profile-nav">
                 <ul>
-                    <li><a href="#">Notification</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="#">Profile</a></li>
+                    <li><a href="#"><img src="../assets/bell.png"/></a></li>
+                    <li><a href="#"><img src="../assets/chat.png"/></a></li>
+                    <li>
+                        <a id="profile" href="#"><img src="../assets/profile-picture.png"/></a>
+                        <ul class="dropdown-menu-profile">
+                            <li><a href="#">Accessibility</a></li>
+                            <div class="underline"></div>
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Grades</a></li>
+                            <li><a href="#">Calendar</a></li>
+                            <li><a href="#">Messages</a></li>
+                            <li><a href="#">Private files</a></li>
+                            <li><a href="#">Reports</a></li>
+                            <div class="underline"></div>
+                            <li><a href="#">Preferences</a></li>
+                            <div class="underline"></div>
+                            <li><a href="#">Log out</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
         <div class="bottom-bar">
             <ul>
                 <li><a href="#">Course</a></li>
-                <li><a href="#">Participants</a></li>
-                <li><a href="#">Grades</a></li>
-                <li><a href="#">Competencies</a></li>
+                <li class="toggle-nav-red"><a href="#">Participants</a></li>
+                <li class="toggle-nav-red"><a href="#">Grades</a></li>
+                <li class="toggle-nav-red"><a href="#">Competencies</a></li>
+                <li class="more-nav-red">
+                    <a id="more-red" class="more_red">More</a>
+                    <ul class="dropdown-menu-red">
+                        <li><a href="#">Participants</a></li>
+                        <li><a href="#">Grades</a></li>
+                        <li><a href="#">Competencies</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </header>
 
-    <h1>Create Assessment</h1>
-    <form id="assessment-form" action="../includes/save_assessment.php" method="POST">
-        <div class="form-group">
-            <label for="assessment-name">Assessment Name:</label>
-            <input type="text" id="assessmentName" name="assessmentName" required>
+    <div class="content-body">
+        <div class="body-container">
+            <form id="assessment-form" action="../includes/save_assessment.php" method="POST">
+                <div class="content-block">
+                    <h1>Create Assessment</h1>
+                    <div class="underline"></div>
+                    <div class="form-group">
+                        <div class="field-block">
+                            <label for="assessment-name"><strong>Assessment Name:</strong></label>
+                            <input type="text" id="assessmentName" name="assessmentName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field-block">
+                            <label for="assessment_desc"><strong>Assessment Description:</strong></label>
+                            <textarea id="assessment_desc" name="assessment_desc" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field-block half-block">
+                            <label for="subject_code"><strong>Subject Code:</strong></label>
+                            <input type="text" id="subject_code" name="subject_code" required>
+                        </div>
+                        <div class="field-block half-block">
+                            <label for="assessment_type"><strong>Assessment Type:</strong></label>
+                            <input type="text" id="assessment_type" name="assessment_type" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field-block half-block">
+                            <label for="open_Date"><strong>Open Date:</strong></label>
+                            <input type="datetime-local" id="open_Date" name="open_Date" required>
+                        </div>
+                        <div class="field-block half-block">
+                            <label for="closing_Date"><strong>Closing Date:</strong></label>
+                            <input type="datetime-local" id="closing_Date" name="closing_Date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field-block half-block">
+                            <label for="time_limit"><strong>Time Limit (Hour:Minute):</strong></label>
+                            <input type="text" id="time_limit" name="time_limit" required>
+                        </div>
+                        <div class="field-block half-block">
+                            <label for="allowed_attempts"><strong>Allowed Attempts:</strong></label>
+                            <input type="number" id="allowed_attempts" name="allowed_attempts" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="questions-container"></div>
+                <div class="two-button-group">
+                    <div>
+                        <button class="button-type-1" type="button" onclick="addQuestion()">Add Question</button>
+                    </div>
+                    <div>
+                        <button class="button-type-1" type="submit">Create Assessment</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="assessment_desc">Assessment Description:</label>
-            <textarea id="assessment_desc" name="assessment_desc" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="subject_code">Subject Code:</label>
-            <input type="text" id="subject_code" name="subject_code" required>
-        </div>
-        <div class="form-group">
-            <label for="assessment_type">Assessment Type:</label>
-            <input type="text" id="assessment_type" name="assessment_type" required>
-        </div>
-        <div class="form-group">
-            <label for="open_Date">Open Date:</label>
-            <input type="datetime-local" id="open_Date" name="open_Date" required>
-        </div>
-        <div class="form-group">
-            <label for="closing_Date">Closing Date:</label>
-            <input type="datetime-local" id="closing_Date" name="closing_Date" required>
-        </div>
-        <div class="form-group">
-            <label for="time_limit">Time Limit (Hour:Minute):</label>
-            <input type="text" id="time_limit" name="time_limit" required>
-        </div>
-        <div class="form-group">
-            <label for="allowed_attempts">Allowed Attempts:</label>
-            <input type="number" id="allowed_attempts" name="allowed_attempts" required>
-        </div>
-        <div id="questions-container"></div>
-        <button type="button" onclick="addQuestion()">Add Question</button>
-        <button type="submit">Create Assessment</button>
-    </form>
+    </div>
 
     <script>
         let questionCount = 0;
@@ -90,26 +168,36 @@
             const questionsContainer = document.getElementById('questions-container');
 
             const questionDiv = document.createElement('div');
-            questionDiv.className = 'form-group';
+            questionDiv.className = 'content-block';
 
             questionDiv.innerHTML = `
-                <label for="question-${questionCount}">Question ${questionCount}:</label>
-                <input type="text" id="question-${questionCount}" name="questions[${questionCount}][text]" required>
-                
-                <label for="question-type-${questionCount}">Question Type:</label>
-                <select id="question-type-${questionCount}" name="questions[${questionCount}][type]" onchange="displayOptions(this, ${questionCount})" required>
-                    <option value="">Select Type</option>
-                    <option value="M">Multiple Choice</option>
-                    <option value="T">True or False</option>
-                    <option value="S">Short Answer (Fill-in-the-Blank)</option>
-                    <option value="F">Match</option>
-                    <option value="E">Long Answer</option>
-                </select>
+            <div class="form-group"><div class="field-block">
+                <label for="question-${questionCount}"><h2>Question ${questionCount}:</h2></label>
+                <input type="text" class="textbox" id="question-${questionCount}" name="questions[${questionCount}][text]" required>
+            </div></div>
 
-                <div id="options-${questionCount}" class="options-container"></div>
-                <br>
-                <label for="points">Points:</label>
-                <input type="number" id="points" name="points" required>
+            <div class="form-group">
+                <div class="field-block half-block">
+                    <label for="points">Points:</label>
+                    <input class="textbox" type="number" id="points" name="points" required>
+                </div>
+                <div class="field-block half-block">
+                    <label for="question-type-${questionCount}">Question Type:</label>
+                    <select class="dropdown" id="question-type-${questionCount}" name="questions[${questionCount}][type]" onchange="displayOptions(this, ${questionCount})" required>
+                        <option value="">Select Type</option>
+                        <option value="M">Multiple Choice</option>
+                        <option value="T">True or False</option>
+                        <option value="S">Short Answer (Fill-in-the-Blank)</option>
+                        <option value="F">Match</option>
+                        <option value="E">Long Answer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="options-${questionCount}" class="options-container"></div>
+            <br>
+
+            
             `;
 
             questionsContainer.appendChild(questionDiv);
@@ -121,52 +209,84 @@
             optionsContainer.innerHTML = '';
             if (selectedType === 'M') {
                 optionsContainer.innerHTML = `
-                    <label for="option1-${count}">Option 1:</label>
-                    <input type="text" id="option1-${count}" name="questions[${count}][options][0]" required>
-                    <label for="option2-${count}">Option 2:</label>
-                    <input type="text" id="option2-${count}" name="questions[${count}][options][1]" required>
-                    <label for="option3-${count}">Option 3:</label>
-                    <input type="text" id="option3-${count}" name="questions[${count}][options][2]" required>
-                    <label for="option4-${count}">Option 4:</label>
-                    <input type="text" id="option4-${count}" name="questions[${count}][options][3]" required>
-
-                    <label for="correct-answer-${count}">Correct Answer:</label>
-                    <select id="correct-answer-${count}" name="questions[${count}][correctAnswer]" required>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
-                        <option value="4">Option 4</option>
-                    </select>
+                <div class="form-group">
+                    <div class="field-block half-block">
+                        <label for="option1-${count}">Option 1:</label>
+                        <input class="textbox" type="text" id="option1-${count}" name="questions[${count}][options][0]" required>
+                    </div>
+                    <div class="field-block half-block">
+                        <label for="option2-${count}">Option 2:</label>
+                        <input class="textbox" type="text" id="option2-${count}" name="questions[${count}][options][1]" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="field-block half-block">
+                        <label for="option3-${count}">Option 3:</label>
+                        <input class="textbox" type="text" id="option3-${count}" name="questions[${count}][options][2]" required>
+                    </div>
+                    <div class="field-block half-block">
+                        <label for="option4-${count}">Option 4:</label>
+                        <input class="textbox" type="text" id="option4-${count}" name="questions[${count}][options][3]" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="field-block">
+                        <label for="correct-answer-${count}">Correct Answer:</label>
+                        <select class="dropdown" id="correct-answer-${count}" name="questions[${count}][correctAnswer]" required>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                            <option value="4">Option 4</option>
+                        </select>
+                    </div>    
+                </div>
                 `;
             } else if (selectedType === 'T') {
                 optionsContainer.innerHTML = `
-                    <label for="boolean-${count}">Correct Answer (True/False):</label>
-                    <select id="boolean-${count}" name="questions[${count}][correctAnswer]" required>
-                        <option value="T">True</option>
-                        <option value="F">False</option>
-                    </select>
+                <div class="form-group">
+                    <div class="field-block">
+                        <label for="boolean-${count}">Correct Answer (True/False):</label>
+                        <select class="dropdown" id="boolean-${count}" name="questions[${count}][correctAnswer]" required>
+                            <option value="T">True</option>
+                            <option value="F">False</option>
+                        </select>
+                    </div>
+                </div>    
                 `;
             } else if (selectedType === 'S') {
                 optionsContainer.innerHTML = `
-                    <label for="fill-blank-${count}">Correct Answer:</label>
-                    <input type="text" id="fill-blank-${count}" name="questions[${count}][correctAnswer]" required>
+                <div class="form-group">
+                    <div class="field-block">
+                        <label for="fill-blank-${count}">Correct Answer:</label>
+                        <input class="textbox" type="text" id="fill-blank-${count}" name="questions[${count}][correctAnswer]" required>
+                    </div>
+                </div>    
                 `;
             } else if (selectedType === 'F') {
                 for (let i = 1; i <= 10; i++) {
                     optionsContainer.innerHTML += `
-                        <label for="match${i}-${count}">Match ${i}:</label>
-                        <input type="text" id="match${i}-${count}" name="questions[${count}][match][${i - 1}]" ${i <= 4 ? 'required' : ''}>
-                        
-                        <label for="m-ans${i}-${count}">Match Correct Answer ${i}:</label>
-                        <input type ='text' id="m-ans${i}-${count}" name="questions[${count}][m_Ans${i}]" ${i <= 4 ? 'required' : ''}>
-
+                    <div class="form-group">
+                        <div class="field-block half-block">
+                            <label for="match${i}-${count}">Match ${i}:</label>
+                            <input class="textbox" type="text" id="match${i}-${count}" name="questions[${count}][match][${i - 1}]" ${i <= 4 ? 'required' : ''}>
+                        </div>
+                        <div class="field-block half-block">   
+                            <label for="m-ans${i}-${count}">Match Correct Answer ${i}:</label>
+                            <input class="textbox" type ='text' id="m-ans${i}-${count}" name="questions[${count}][m_Ans${i}]" ${i <= 4 ? 'required' : ''}>
+                        </div>
+                    </div>    
                     `;
                 }
             } else if (selectedType === 'E') {
                 optionsContainer.innerHTML = `
-                <label for="long-answer-${count}">Long Answer:</label>
-                <textarea id="long-answer-${count}" name="questions[${count}][longAnswer]" required></textarea>
+                <div class="form-group">
+                    <div class="field-block">
+                        <label for="long-answer-${count}">Long Answer:</label>
+                        <textarea class="textarea" id="long-answer-${count}" name="questions[${count}][longAnswer]" required></textarea>
+                    </div>    
+                </div>
                 `;
+                      
             }
         }
 
@@ -179,6 +299,29 @@
             defaultHour: 0,
             defaultMinute: 0
         });
+        //navbar
+        document.getElementById("more-white").addEventListener("click", function(){
+        document.getElementsByClassName("dropdown-menu-white")[0].classList.toggle("toggle-in");
+        })
+
+        //navbar
+        document.getElementById("more-red").addEventListener("click", function(){
+        document.getElementsByClassName("dropdown-menu-red")[0].classList.toggle("toggle-in");
+        })
+
+        //profile
+        document.getElementById("profile").addEventListener("click", function(){
+        document.getElementsByClassName("dropdown-menu-profile")[0].classList.toggle("toggle-in");
+        })
+
+        //drawer
+        document.getElementsByClassName("toggle-hamburger")[0].addEventListener("click", function(){
+        document.getElementById("drawer").classList.toggle("enter-from-left");
+        })
+
+        document.getElementsByClassName("close-button")[0].addEventListener("click", function(){
+        document.getElementById("drawer").classList.toggle("enter-from-left");
+        })
     </script>
 </body>
 </html>

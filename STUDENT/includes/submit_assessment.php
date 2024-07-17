@@ -165,7 +165,9 @@
     $response = [
         'score' => $earnedPoints,
         'grade' => $grade,
-        'totalPoints' => $totalPoints
+        'totalPoints' => $totalPoints,
+        'assessment_ID' => $assessmentID,
+        'subjectCode' => $subjectCode
     ];
 
     header('Content-Type: application/json');

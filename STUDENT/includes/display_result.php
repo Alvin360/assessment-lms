@@ -30,7 +30,7 @@
         <p id="grade"></p>
         <div class="button-container">
             <a href="../landing_page.php" class="button">Go to Assessment Page</a>
-            <a href="assessment-viewinfo.php" class="button">Go to Assessment Info</a>
+            <a id="assessment-info-link" class="button">Go to Assessment Info</a>
         </div>
     </div>
     <script>
@@ -39,9 +39,16 @@
             const score = urlParams.get('score');
             const grade = urlParams.get('grade');
             const totalPoints = urlParams.get('totalPoints');
+            const assessmentID = urlParams.get('assessmentID');
+            const subjectCode = urlParams.get('subjectCode');
+
 
             document.getElementById('score').textContent = `Score: ${score} out of ${totalPoints}`;
             document.getElementById('grade').textContent = `Grade: ${grade}%`;
+        
+            // Set the href for the "Go to Assessment Info" button
+            const assessmentInfoLink = document.getElementById('assessment-info-link');
+            assessmentInfoLink.href = `assessment-viewinfo.php?assessment_ID=${assessmentID}&subject_Code=${subjectCode}`;
         });
     </script>
 </body>

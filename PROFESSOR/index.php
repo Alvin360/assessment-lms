@@ -39,7 +39,7 @@
             <a>My Courses</a>
         </div>
         <div>
-            <a>Assessment</a>
+            <a style="text-decoration: none; color: black;" href="../PROFESSOR/index.php">Assessment</a>
         </div>
     </div>
     <header>
@@ -60,7 +60,7 @@
                         <a id="more-white" class="more">More</a>
                         <ul class="dropdown-menu-white">
                             <li><a href="#">My Courses</a></li>
-                            <li><a href="#">Assessment</a></li>
+                            <li><a href="../PROFESSOR/index.php">Assessment</a></li>
                         </ul>
                     </li>
                 </ul>
