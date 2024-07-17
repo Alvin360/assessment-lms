@@ -30,30 +30,44 @@ function populateAssessments(assessments) {
 
     for (const subject in assessments) {
         if (assessments.hasOwnProperty(subject) && assessments[subject].length > 0) {
-            const subjectHeader = document.createElement('h2');
+            const subjectSection = document.createElement('div');
+            subjectSection.className = 'subject_section';
+            const subjectHeader = document.createElement('h1');
             subjectHeader.textContent = subject;
-            assessmentsContainer.appendChild(subjectHeader);
+
+            subjectSection.appendChild(subjectHeader);
+            const underline = document.createElement('div');
+            underline.className = 'underline';
+            subjectSection.appendChild(underline);
+
+            //assessmentsContainer.appendChild(subjectHeader);
+
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'card_container';
 
             assessments[subject].forEach(assessment => {
                 const assessmentCard = document.createElement('div');
                 assessmentCard.className = 'card_topic';
                 const buttonClass = getButtonClass(assessment.status);
                 assessmentCard.innerHTML = `
-                    <div class="container_assessment_student">
                         <div class="flex_row">
-                            <h3>${assessment.assessment_name}</h3>
+                            <h2>${assessment.assessment_name}</h2>
                             <button class="assessment-button ${buttonClass}">${assessment.status}</button>
                         </div>
-                        <p>Opened: ${assessment.open_Date}</p>
-                        <p>Due: ${assessment.closing_Date}</p>
-                    </div>
+                        <div class="p_cont">
+                            <p class="p_nospace">Opened: ${assessment.open_Date}</p>
+                            <p class="p_nospace">Due: ${assessment.closing_Date}</p>
+                        </div>
                 `;
                 const button = assessmentCard.querySelector('.assessment-button');
                 button.addEventListener('click', () => {
                     window.location.href = `../STUDENT/includes/assessment-viewinfo.php?assessment_ID=${assessment.assessment_id}&subject_Code=${assessment.subject_Code}`;
                 });
-                assessmentsContainer.appendChild(assessmentCard);
+                cardContainer.appendChild(assessmentCard);
             });
+
+            subjectSection.appendChild(cardContainer);
+            assessmentsContainer.appendChild(subjectSection);
         }
     }
 }
@@ -94,29 +108,31 @@ async function fetchAssessmentDetails() {
     data.questions.forEach(question => {
         const questionDiv = document.createElement('div');
         questionDiv.classList.add('question');
+        questionDiv.classList.add('content-block');
 
-        let questionHTML = `<p>${question.question_No}. ${question.question} (${question.points} points)</p>`;
+        let questionHTML = `<p class='question-txt'><strong>${question.question_No}. ${question.question} </strong>(${question.points} points)</p>`;
 
+        questionHTML += '<div class="choices-field">'
         if (question.question_Type === 'M') {
             // Multiple choice question
-            questionHTML += `
+            questionHTML += `<div class="form-group"><div class="field-block">
                 <label><input type="radio" name="question-${question.question_ID}" value="${question.choice1}" required> ${question.choice1}</label><br>
                 <label><input type="radio" name="question-${question.question_ID}" value="${question.choice2}" required> ${question.choice2}</label><br>
                 <label><input type="radio" name="question-${question.question_ID}" value="${question.choice3}" required> ${question.choice3}</label><br>
                 <label><input type="radio" name="question-${question.question_ID}" value="${question.choice4}" required> ${question.choice4}</label>
-            `;
+            </div></div>`;
         } else if (question.question_Type === 'T') {
             // True/false question
-            questionHTML += `
+            questionHTML += `<div class="form-group"><div class="field-block">
                 <label><input type="radio" name="question-${question.question_ID}" value="T" required> True</label><br>
                 <label><input type="radio" name="question-${question.question_ID}" value="F" required> False</label>
-            `;
+            </div></div>`;
         } else if (question.question_Type === 'S') {
             // Short answer question
-            questionHTML += `<input type="text" name="question-${question.question_ID}" required>`;
+            questionHTML += `<div class="form-group"><div class="field-block"><input class='textbox' type="text" name="question-${question.question_ID}" required></div></div>`;
         } else if (question.question_Type === 'F') {
             // Matching question
-            questionHTML += '<table>';
+            questionHTML += '<div class="form-group"><table>';
             const matchOptions = [];
             const matches = [];
             for (let i = 1; i <= 10; i++) {
@@ -132,7 +148,7 @@ async function fetchAssessmentDetails() {
                     <tr>
                         <td>${match}</td>
                         <td>
-                            <select name="question-${question.question_ID}-match${index + 1}" required>
+                            <select class="dropdown" name="question-${question.question_ID}-match${index + 1}" required>
                                 <option value="">Select...</option>
                                 ${matchOptions.map(option => `<option value="${option}">${option}</option>`).join('')}
                             </select>
@@ -140,8 +156,13 @@ async function fetchAssessmentDetails() {
                     </tr>
                 `;
             });
-            questionHTML += '</table>';
+            questionHTML += '</table></div>';
+        } else if (question.question_Type === 'E') {
+            // Short answer question
+            questionHTML += `<div class="form-group"><div class="field-block"><textarea class="textarea" type="text" name="question-${question.question_ID}" required></textarea></div></div>`;
         }
+
+        questionHTML += '</div>'
 
         questionDiv.innerHTML = questionHTML;
         questionsContainer.appendChild(questionDiv);
@@ -152,10 +173,6 @@ async function fetchAssessmentDetails() {
     if (data.time_Limit) {
         console.log('Setting up timer with limit:', data.time_Limit);
         setupTimer(data.time_Limit);
-    }
-
-    else {
-        console.log("data time limit not fetched");
     }
 
     // Add hidden input fields for assessmentID and userID
@@ -170,6 +187,7 @@ async function fetchAssessmentDetails() {
     userIDInput.name = 'userID';
     userIDInput.value = $userID; // Use the actual userID from the session
     document.getElementById('assessment-form').appendChild(userIDInput);
+
 }
 
 function setupTimer(timeLimit) {
@@ -221,3 +239,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+//navbar
+document.getElementById("more-white").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-white")[0].classList.toggle("toggle-in");
+  })
+  
+  //navbar
+  document.getElementById("more-red").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-red")[0].classList.toggle("toggle-in");
+  })
+  
+  //profile
+  document.getElementById("profile").addEventListener("click", function(){
+    document.getElementsByClassName("dropdown-menu-profile")[0].classList.toggle("toggle-in");
+  })
+  
+  //drawer
+  document.getElementsByClassName("toggle-hamburger")[0].addEventListener("click", function(){
+    document.getElementById("drawer").classList.toggle("enter-from-left");
+  })
+  
+  document.getElementsByClassName("close-button")[0].addEventListener("click", function(){
+    document.getElementById("drawer").classList.toggle("enter-from-left");
+  })
